@@ -1,0 +1,261 @@
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, RefreshCw, CheckCircle2, Info, BookOpen } from 'lucide-react';
+
+const rawData = `What does the acronym SPSV stand for in the context of Irish public transport?,Small Public Service Vehicle.
+"What is the maximum number of passengers an SPSV is permitted to carry, excluding the driver?",Up to eight passengers.
+"Which statutory body, established in 2009, is the licensing authority for Small Public Service Vehicles in Ireland?",The National Transport Authority (NTA).
+Name the six categories of vehicles included under the term SPSV.,"Taxis, wheelchair accessible taxis, hackneys, wheelchair accessible hackneys, local area hackneys, and limousines."
+The _____ is an individual or organisation that provides a booking service for SPSV journeys delivered by someone else.,dispatch operator
+What is a 'driver display card' used for in an SPSV?,It is an identification card that SPSV drivers must display in their vehicles as proof of their licence to provide SPSV services.
+"A taxi is '_____ for hire' when it is available for hire in a public area, allowing a passenger to hail it when in motion or at a taxi rank.",plying
+What is Tariff A in the context of taxi fares?,"It is the standard fare charge that applies after the initial charge, covering the next 14.5 km or 42 minutes of a journey."
+What is the primary function of the Advisory Committee on Small Public Service Vehicles (Taxi Advisory Committee)?,To give correct guidance and advice to the NTA on issues that are important to SPSVs and their companies.
+What are the three main areas of licensing in the SPSV industry?,"Driver licences, vehicle licences, and dispatch operator licences."
+Which organisation is the licensing authority for SPSV drivers in Ireland?,An Garda Síochána.
+A person with a standard SPSV driver licence is licensed to drive which categories of SPSV?,They are licensed to drive any category of SPSV.
+"To get an SPSV on the road, a driver must have a valid SPSV driver licence, a licensed SPSV vehicle, a valid insurance certificate, a valid roadworthiness certificate, and ____.",tax clearance
+What are the two modules of the SPSV Driver Entry Test for new applicants?,The Industry Knowledge Module and the Area Knowledge Module.
+"By law, a small section of the national SPSV register is available to the public on which website?",www.transportforireland.ie.
+Which organisation in the SPSV driver licensing process is responsible for managing applications and conducting background checks (vetting)?,An Garda Síochána.
+What is the minimum driving licence class required to apply for an SPSV driver licence?,Class B or higher.
+Applicants for which type of driver licence do not have to pass the SPSV Driver Entry Test?,Local area hackney driver licences.
+What is the fee for a new SPSV Driver's Licence application?,€250.
+Where must an SPSV driver licence applicant in Dublin submit their application?,To the Carriage Office.
+What is the maximum time an SPSV driver licence application process can take to complete?,Up to 12 weeks.
+"A driver convicted of certain serious crimes, such as murder or rape, can result in a _____ disqualification from holding an SPSV driver licence.",lifetime
+What two types of ID cards does the NTA send to a driver once their licence is approved by An Garda Síochána?,A large driver display card for the dashboard and a small smart card to be carried at all times.
+What must be displayed on a taxi's roof sign to indicate the county where the driver is licensed to work?,An area sticker with a one or two-letter code for the county.
+A regular SPSV driver licence can be valid for a maximum of how many years?,Up to five years.
+"If an SPSV driver's licence has been expired for more than 12 months, what is its status?","Timed out, meaning it cannot be renewed and a new application, including the test, is required."
+Under what circumstances may an SPSV driver reasonably refuse to carry a passenger requesting a journey in a taxi?,If the requested journey is more than 30 km.
+What is an SPSV driver's responsibility regarding guide dogs or assistance animals?,"They must accept and carry them for passengers who need them, at no extra charge."
+What is the purpose of the 'SPSV Driver Check App' for passengers?,It allows passengers to check if a driver and vehicle are licensed and to verify the driver's identity.
+What are the two main types of standards for SPSV vehicles?,Roadworthiness standards and SPSV specific suitability standards.
+An NCT certificate for a vehicle must be issued no earlier than _____ days before its SPSV Vehicle Inspection.,90
+"The NTA's _____ explains the detailed rules all SPSV vehicles must follow regarding age, size, comfort, and accessibility.",Initial Suitability Inspection Manual
+What is the minimum luggage capacity required for an SPSV (taxi or hackney)?,420 litres.
+What is the minimum percentage of visible light that must be let in by an SPSV's front windscreen and passenger side windows?,70%.
+"If a Roman numeral 'V' is present next to the European approval number on a vehicle's window glass, what does this indicate for an SPSV inspection?",The glass is too dark and will not pass the Initial Suitability Inspection.
+A wheelchair accessible vehicle must be certified by a qualified _____ to ensure it meets NTA standards.,Technical Assessor
+A Technical Assessor's Full Report for a wheelchair accessible vehicle must be dated no more than _____ days before the Initial Suitability Inspection.,60
+What is the maximum gross vehicle weight for limousines licensed after 1 January 2013?,"3,500 kilograms."
+Can an SPSV vehicle licence be sold to another person?,"No, a vehicle licence cannot be sold; transfer is only possible upon the death of the licence holder to a nominated person."
+"Currently, the NTA is only accepting new licence applications for which four categories of SPSV?","Wheelchair accessible taxis, wheelchair accessible hackneys, local area hackneys, and limousines."
+A 'Conditional Offer' letter for an SPSV vehicle licence is valid for how many days?,90 days.
+Name three of the six required safety and communication items that all SPSVs must carry.,"Any three of: fire extinguisher, first-aid kit, high-visibility vest, warning triangle, torch, pen and paper."
+Which organisation must verify and seal a taximeter to ensure it meets legal requirements?,The Legal Metrology Service (part of the National Standards Authority of Ireland).
+What information must be displayed on a regulation taxi roof sign?,"The word 'TAXI' or 'TACSAÍ', the vehicle licence number, and the relevant county sticker(s)."
+When must the light in a taxi roof sign be on?,The light must be on when the taxi is available for hire.
+A vehicle licence for a vehicle more than 10 years old is usually valid for what period?,Six months.
+You can apply to renew an SPSV vehicle licence up to _____ days before it expires.,60
+"If an SPSV vehicle licence expires, you have up to _____ from the expiry date to apply for a replacement.",24 months (two years)
+"When changing the vehicle on your licence, what must you do with the tamper-proof licence discs from the old vehicle?",You must remove them and bring them to the Initial Suitability Inspection of the new vehicle.
+What form must be filled out to nominate a person to take over an SPSV vehicle licence in the event of the licence holder's death?,Form S15N.
+"What is the driver's responsibility concerning the vehicle they are driving, even if someone else owns it?",It is the driver’s responsibility to make sure the vehicle they are driving follows the rules.
+What colour is the inside of a tamper-proof licence disc for a taxi?,Yellow.
+What colour is the inside of a tamper-proof licence disc for a limousine?,Silver.
+What colour is the inside of a tamper-proof licence disc for a hackney?,Blue.
+It is the _____ responsibility to ensure the driver-to-vehicle link is always up to date with the NTA.,driver's
+Are taxis permitted to use contra-flow bus lanes (where traffic travels in the opposite direction)?,"No, taxis are not allowed in contra-flow bus lanes."
+Are hackneys and limousines allowed to use bus lanes?,"No, hackneys and limousines are not allowed to use bus lanes."
+What must a taxi driver do with their roof sign when the vehicle is in a public area but not being operated as a taxi?,The roof sign must be removed.
+The cashless payment device in a taxi must be linked to the _____ to allow for identification in transaction history.,"driver, not the vehicle"
+Can a taxi driver apply a surcharge or extra fee for cashless payments?,"No, no surcharge or extra fee can be applied to cashless payments."
+Who should be contacted if a passenger refuses to pay the fare and no agreement can be reached?,An Garda Síochána should be contacted.
+Name one valid reason for an SPSV driver to refuse service to a passenger.,"Any one of: disorderly/abusive behaviour, consuming food/drink, risk of dirtying vehicle, excessive luggage, or exceeding passenger capacity."
+What two organisations are involved in the SPSV driver licensing process?,An Garda Síochána and the National Transport Authority (NTA).
+What must be displayed on a passenger door of a wheelchair accessible hackney?,The accessibility symbol.
+Local area hackneys must only operate in the area listed on the ____.,licence
+"Under section 24 of the Taxi Regulation Act 2013, it is an offence for a person to hire a taxi and refuse to pay a fare calculated by a verified _____.",taximeter
+What does the term 'standing for hire' mean for a taxi?,"A taxi 'stands for hire' when it is stationary and available for hire in a public area, such as a taxi rank."
+What is the initial fare charge on a taximeter intended to cover?,The first 500 meters of a journey or a period of 85 seconds.
+A hackney or limousine driver must make a _____ receipt available to the customer at the end of the journey.,written
+"If a vehicle is less than three months old and has travelled less than 3,000 kilometres, is an NCT required for SPSV licensing?","No, an NCT is not required in this case."
+"To what internal temperature must an SPSV be able to maintain its passenger area, even if it is -5°C outside?",20° Celsius.
+An SPSV driver must inform the NTA in writing of a change of address within how many days?,Within 21 days.`;
+
+const parseCSV = (csv) => {
+  const lines = csv.split('\n');
+  const result = [];
+  lines.forEach(line => {
+    if (!line.trim()) return;
+    
+    // Simple regex for CSV that handles quotes
+    const matches = line.match(/(".*?"|[^,]+)(?=\s*,|\s*$)/g);
+    if (matches && matches.length >= 2) {
+      const question = matches[0].replace(/^"|"$/g, '').trim();
+      const answer = matches[1].replace(/^"|"$/g, '').trim();
+      result.push({ question, answer });
+    }
+  });
+  return result;
+};
+
+const App = () => {
+  const [cards, setCards] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [shuffle, setShuffle] = useState(false);
+  const [completed, setCompleted] = useState(new Set());
+
+  useEffect(() => {
+    const parsed = parseCSV(rawData);
+    setCards(parsed);
+  }, []);
+
+  const handleNext = () => {
+    setIsFlipped(false);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev + 1) % cards.length);
+    }, 150);
+  };
+
+  const handlePrev = () => {
+    setIsFlipped(false);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev - 1 + cards.length) % cards.length);
+    }, 150);
+  };
+
+  const handleShuffle = () => {
+    const shuffled = [...cards].sort(() => Math.random() - 0.5);
+    setCards(shuffled);
+    setCurrentIndex(0);
+    setIsFlipped(false);
+    setCompleted(new Set());
+  };
+
+  const toggleMastered = () => {
+    const newCompleted = new Set(completed);
+    if (newCompleted.has(currentIndex)) {
+      newCompleted.delete(currentIndex);
+    } else {
+      newCompleted.add(currentIndex);
+    }
+    setCompleted(newCompleted);
+  };
+
+  if (cards.length === 0) return <div className="flex items-center justify-center h-screen">Loading...</div>;
+
+  const progress = ((completed.size / cards.length) * 100).toFixed(0);
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-100">
+      {/* Header */}
+      <header className="bg-white border-b sticky top-0 z-10 px-4 py-3 flex items-center justify-between shadow-sm">
+        <div className="flex items-center gap-2">
+          <div className="bg-blue-600 p-1.5 rounded-lg text-white">
+            <BookOpen size={20} />
+          </div>
+          <h1 className="font-bold text-lg tracking-tight">SPSV Prep</h1>
+        </div>
+        <button 
+          onClick={handleShuffle}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-sm font-medium transition-colors"
+        >
+          <RefreshCw size={14} />
+          Shuffle
+        </button>
+      </header>
+
+      <main className="max-w-md mx-auto px-4 py-8">
+        {/* Progress Bar */}
+        <div className="mb-6 space-y-2">
+          <div className="flex justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <span>Mastery: {completed.size}/{cards.length}</span>
+            <span>{progress}%</span>
+          </div>
+          <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-green-500 transition-all duration-500 ease-out" 
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Card Container */}
+        <div className="relative h-80 perspective-1000">
+          <div 
+            className={`relative w-full h-full transition-transform duration-500 transform-style-3d cursor-pointer ${isFlipped ? 'rotate-y-180' : ''}`}
+            onClick={() => setIsFlipped(!isFlipped)}
+          >
+            {/* Front of Card */}
+            <div className={`absolute inset-0 backface-hidden bg-white rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-xl border border-slate-100 ${isFlipped ? 'pointer-events-none' : ''}`}>
+              <span className="absolute top-4 left-6 text-xs font-bold text-slate-300 uppercase tracking-widest">Question {currentIndex + 1}</span>
+              <p className="text-xl font-medium text-slate-800 leading-relaxed">
+                {cards[currentIndex].question}
+              </p>
+              <div className="mt-8 text-blue-500 text-sm font-semibold flex items-center gap-1 animate-pulse">
+                <Info size={14} />
+                Tap to see answer
+              </div>
+            </div>
+
+            {/* Back of Card */}
+            <div className={`absolute inset-0 backface-hidden bg-blue-600 text-white rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-xl rotate-y-180 ${!isFlipped ? 'pointer-events-none' : ''}`}>
+              <span className="absolute top-4 left-6 text-xs font-bold text-blue-200 uppercase tracking-widest">Answer</span>
+              <p className="text-xl font-medium leading-relaxed">
+                {cards[currentIndex].answer}
+              </p>
+              <div className="mt-8 text-blue-200 text-sm font-semibold">
+                Tap to flip back
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Controls */}
+        <div className="mt-8 flex flex-col items-center gap-6">
+          <div className="flex items-center gap-4 w-full justify-center">
+            <button 
+              onClick={handlePrev}
+              className="p-4 rounded-full bg-white shadow-md hover:bg-slate-50 active:scale-90 transition-all text-slate-600"
+            >
+              <ChevronLeft size={28} />
+            </button>
+            
+            <button 
+              onClick={toggleMastered}
+              className={`px-6 py-4 rounded-full flex items-center gap-2 font-bold shadow-md transition-all active:scale-95 ${
+                completed.has(currentIndex) 
+                ? 'bg-green-100 text-green-700' 
+                : 'bg-white text-slate-700'
+              }`}
+            >
+              <CheckCircle2 size={20} />
+              {completed.has(currentIndex) ? 'Mastered' : 'Mark Mastered'}
+            </button>
+
+            <button 
+              onClick={handleNext}
+              className="p-4 rounded-full bg-white shadow-md hover:bg-slate-50 active:scale-90 transition-all text-slate-600"
+            >
+              <ChevronRight size={28} />
+            </button>
+          </div>
+
+          <div className="text-sm text-slate-400 font-medium">
+             Swipe or use arrows to navigate
+          </div>
+        </div>
+      </main>
+
+      <style>{`
+        .perspective-1000 {
+          perspective: 1000px;
+        }
+        .backface-hidden {
+          backface-visibility: hidden;
+        }
+        .transform-style-3d {
+          transform-style: preserve-3d;
+        }
+        .rotate-y-180 {
+          transform: rotateY(180deg);
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default App;
