@@ -1,7 +1,112 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, RefreshCw, CheckCircle2, Info, BookOpen } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPSV Prep - Flashcards</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .perspective-1000 { perspective: 1000px; }
+        .backface-hidden { backface-visibility: hidden; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .card-inner { transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans selection:bg-blue-100 pb-12">
 
-const rawData = `What does the acronym SPSV stand for in the context of Irish public transport?,Small Public Service Vehicle.
+    <!-- Header -->
+    <header class="bg-white border-b sticky top-0 z-10 px-4 py-3 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-2">
+            <div class="bg-blue-600 p-1.5 rounded-lg text-white">
+                <i data-lucide="book-open" class="w-5 h-5"></i>
+            </div>
+            <h1 class="font-bold text-lg tracking-tight">SPSV Prep</h1>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="shuffleDeck()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-sm font-medium transition-colors">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                Shuffle
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-md mx-auto px-4 py-6">
+        <!-- Progress Bar -->
+        <div class="mb-6 space-y-2 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+            <div class="flex justify-between text-xs font-bold text-slate-500 uppercase tracking-wider">
+                <span id="mastery-text">Mastery: 0 / 0</span>
+                <span id="progress-percent">0%</span>
+            </div>
+            <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                <div id="progress-bar" class="h-full bg-green-500 transition-all duration-700 ease-out shadow-[0_0_8px_rgba(34,197,94,0.4)]" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Card Container -->
+        <div class="relative h-96 perspective-1000">
+            <div id="card-inner" class="card-inner relative w-full h-full transform-style-3d cursor-pointer" onclick="toggleFlip()">
+                <!-- Front -->
+                <div class="absolute inset-0 backface-hidden bg-white rounded-[2rem] p-8 flex flex-col items-center justify-center text-center shadow-xl border border-slate-100">
+                    <div class="absolute top-6 flex justify-between w-full px-8">
+                        <span id="card-index" class="text-xs font-bold text-slate-300 uppercase tracking-widest">Q 1</span>
+                        <div id="mastery-indicator" class="hidden text-green-500">
+                            <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <p id="question-text" class="text-xl md:text-2xl font-semibold text-slate-800 leading-tight"></p>
+                    <div class="mt-10 text-blue-500 text-sm font-bold flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full animate-pulse">
+                        <i data-lucide="info" class="w-4 h-4"></i>
+                        Tap to reveal answer
+                    </div>
+                </div>
+
+                <!-- Back -->
+                <div class="absolute inset-0 backface-hidden bg-blue-600 text-white rounded-[2rem] p-8 flex flex-col items-center justify-center text-center shadow-2xl rotate-y-180">
+                    <span class="absolute top-6 left-8 text-xs font-bold text-blue-200 uppercase tracking-widest">Answer</span>
+                    <p id="answer-text" class="text-xl md:text-2xl font-medium leading-relaxed"></p>
+                    <div class="mt-10 text-blue-100 text-sm font-semibold opacity-80 border border-blue-400/30 px-4 py-2 rounded-full">
+                        Tap to flip back
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="mt-8 flex flex-col items-center gap-8">
+            <div class="flex items-center gap-4 w-full justify-center">
+                <button onclick="prevCard()" class="p-4 rounded-2xl bg-white shadow-lg hover:bg-slate-50 active:scale-90 transition-all text-slate-600 border border-slate-100">
+                    <i data-lucide="chevron-left" class="w-8 h-8"></i>
+                </button>
+                
+                <button id="mastery-btn" onclick="toggleMastered()" class="px-8 py-4 rounded-2xl flex items-center gap-3 font-bold shadow-lg transition-all active:scale-95 border bg-white text-slate-700 border-slate-200">
+                    <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+                    <span id="btn-label">Mark Mastered</span>
+                </button>
+
+                <button onclick="nextCard()" class="p-4 rounded-2xl bg-white shadow-lg hover:bg-slate-50 active:scale-90 transition-all text-slate-600 border border-slate-100">
+                    <i data-lucide="chevron-right" class="w-8 h-8"></i>
+                </button>
+            </div>
+
+            <button onclick="resetProgress()" class="text-xs font-bold text-slate-400 hover:text-red-400 uppercase tracking-tighter transition-colors">
+                Reset All Progress
+            </button>
+        </div>
+    </main>
+
+    <footer class="text-center mt-4">
+        <p class="text-[10px] text-slate-400 px-8">
+            No server required. Progress saved in your browser.
+        </p>
+    </footer>
+
+    <script>
+        // Data embedded directly
+        const rawData = `What does the acronym SPSV stand for in the context of Irish public transport?,Small Public Service Vehicle.
 "What is the maximum number of passengers an SPSV is permitted to carry, excluding the driver?",Up to eight passengers.
 "Which statutory body, established in 2009, is the licensing authority for Small Public Service Vehicles in Ireland?",The National Transport Authority (NTA).
 Name the six categories of vehicles included under the term SPSV.,"Taxis, wheelchair accessible taxis, hackneys, wheelchair accessible hackneys, local area hackneys, and limousines."
@@ -74,188 +179,148 @@ A hackney or limousine driver must make a _____ receipt available to the custome
 "To what internal temperature must an SPSV be able to maintain its passenger area, even if it is -5°C outside?",20° Celsius.
 An SPSV driver must inform the NTA in writing of a change of address within how many days?,Within 21 days.`;
 
-const parseCSV = (csv) => {
-  const lines = csv.split('\n');
-  const result = [];
-  lines.forEach(line => {
-    if (!line.trim()) return;
-    
-    // Simple regex for CSV that handles quotes
-    const matches = line.match(/(".*?"|[^,]+)(?=\s*,|\s*$)/g);
-    if (matches && matches.length >= 2) {
-      const question = matches[0].replace(/^"|"$/g, '').trim();
-      const answer = matches[1].replace(/^"|"$/g, '').trim();
-      result.push({ question, answer });
-    }
-  });
-  return result;
-};
+        let cards = [];
+        let currentIndex = 0;
+        let isFlipped = false;
+        let mastered = new Set();
 
-const App = () => {
-  const [cards, setCards] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isFlipped, setIsFlipped] = useState(false);
-  const [shuffle, setShuffle] = useState(false);
-  const [completed, setCompleted] = useState(new Set());
+        function parseCSV(csv) {
+            const matches = csv.match(/(".*?"|[^,]+)(?=\s*,|\s*$)/gm);
+            const result = [];
+            for (let i = 0; i < matches.length; i += 2) {
+                if (matches[i] && matches[i+1]) {
+                    result.push({
+                        question: matches[i].replace(/^"|"$/g, '').trim(),
+                        answer: matches[i+1].replace(/^"|"$/g, '').trim()
+                    });
+                }
+            }
+            return result;
+        }
 
-  useEffect(() => {
-    const parsed = parseCSV(rawData);
-    setCards(parsed);
-  }, []);
+        function init() {
+            cards = parseCSV(rawData);
+            const saved = localStorage.getItem('spsv_mastery');
+            if (saved) {
+                mastered = new Set(JSON.parse(saved));
+            }
+            updateUI();
+            lucide.createIcons();
+        }
 
-  const handleNext = () => {
-    setIsFlipped(false);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % cards.length);
-    }, 150);
-  };
+        function updateUI() {
+            const current = cards[currentIndex];
+            const qEl = document.getElementById('question-text');
+            const aEl = document.getElementById('answer-text');
+            const indexEl = document.getElementById('card-index');
+            const masteryIndicator = document.getElementById('mastery-indicator');
+            const masteryBtn = document.getElementById('mastery-btn');
+            const btnLabel = document.getElementById('btn-label');
+            const progressPercent = document.getElementById('progress-percent');
+            const progressBar = document.getElementById('progress-bar');
+            const masteryText = document.getElementById('mastery-text');
 
-  const handlePrev = () => {
-    setIsFlipped(false);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev - 1 + cards.length) % cards.length);
-    }, 150);
-  };
+            qEl.innerText = current.question;
+            aEl.innerText = current.answer;
+            indexEl.innerText = `Q ${currentIndex + 1}`;
 
-  const handleShuffle = () => {
-    const shuffled = [...cards].sort(() => Math.random() - 0.5);
-    setCards(shuffled);
-    setCurrentIndex(0);
-    setIsFlipped(false);
-    setCompleted(new Set());
-  };
-
-  const toggleMastered = () => {
-    const newCompleted = new Set(completed);
-    if (newCompleted.has(currentIndex)) {
-      newCompleted.delete(currentIndex);
-    } else {
-      newCompleted.add(currentIndex);
-    }
-    setCompleted(newCompleted);
-  };
-
-  if (cards.length === 0) return <div className="flex items-center justify-center h-screen">Loading...</div>;
-
-  const progress = ((completed.size / cards.length) * 100).toFixed(0);
-
-  return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-100">
-      {/* Header */}
-      <header className="bg-white border-b sticky top-0 z-10 px-4 py-3 flex items-center justify-between shadow-sm">
-        <div className="flex items-center gap-2">
-          <div className="bg-blue-600 p-1.5 rounded-lg text-white">
-            <BookOpen size={20} />
-          </div>
-          <h1 className="font-bold text-lg tracking-tight">SPSV Prep</h1>
-        </div>
-        <button 
-          onClick={handleShuffle}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-sm font-medium transition-colors"
-        >
-          <RefreshCw size={14} />
-          Shuffle
-        </button>
-      </header>
-
-      <main className="max-w-md mx-auto px-4 py-8">
-        {/* Progress Bar */}
-        <div className="mb-6 space-y-2">
-          <div className="flex justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider">
-            <span>Mastery: {completed.size}/{cards.length}</span>
-            <span>{progress}%</span>
-          </div>
-          <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-green-500 transition-all duration-500 ease-out" 
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-        </div>
-
-        {/* Card Container */}
-        <div className="relative h-80 perspective-1000">
-          <div 
-            className={`relative w-full h-full transition-transform duration-500 transform-style-3d cursor-pointer ${isFlipped ? 'rotate-y-180' : ''}`}
-            onClick={() => setIsFlipped(!isFlipped)}
-          >
-            {/* Front of Card */}
-            <div className={`absolute inset-0 backface-hidden bg-white rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-xl border border-slate-100 ${isFlipped ? 'pointer-events-none' : ''}`}>
-              <span className="absolute top-4 left-6 text-xs font-bold text-slate-300 uppercase tracking-widest">Question {currentIndex + 1}</span>
-              <p className="text-xl font-medium text-slate-800 leading-relaxed">
-                {cards[currentIndex].question}
-              </p>
-              <div className="mt-8 text-blue-500 text-sm font-semibold flex items-center gap-1 animate-pulse">
-                <Info size={14} />
-                Tap to see answer
-              </div>
-            </div>
-
-            {/* Back of Card */}
-            <div className={`absolute inset-0 backface-hidden bg-blue-600 text-white rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-xl rotate-y-180 ${!isFlipped ? 'pointer-events-none' : ''}`}>
-              <span className="absolute top-4 left-6 text-xs font-bold text-blue-200 uppercase tracking-widest">Answer</span>
-              <p className="text-xl font-medium leading-relaxed">
-                {cards[currentIndex].answer}
-              </p>
-              <div className="mt-8 text-blue-200 text-sm font-semibold">
-                Tap to flip back
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Controls */}
-        <div className="mt-8 flex flex-col items-center gap-6">
-          <div className="flex items-center gap-4 w-full justify-center">
-            <button 
-              onClick={handlePrev}
-              className="p-4 rounded-full bg-white shadow-md hover:bg-slate-50 active:scale-90 transition-all text-slate-600"
-            >
-              <ChevronLeft size={28} />
-            </button>
+            const isMastered = mastered.has(current.question);
             
-            <button 
-              onClick={toggleMastered}
-              className={`px-6 py-4 rounded-full flex items-center gap-2 font-bold shadow-md transition-all active:scale-95 ${
-                completed.has(currentIndex) 
-                ? 'bg-green-100 text-green-700' 
-                : 'bg-white text-slate-700'
-              }`}
-            >
-              <CheckCircle2 size={20} />
-              {completed.has(currentIndex) ? 'Mastered' : 'Mark Mastered'}
-            </button>
+            // Mastery UI
+            if (isMastered) {
+                masteryIndicator.classList.remove('hidden');
+                masteryBtn.className = "px-8 py-4 rounded-2xl flex items-center gap-3 font-bold shadow-lg transition-all active:scale-95 border bg-green-500 text-white border-green-600";
+                btnLabel.innerText = "Mastered";
+            } else {
+                masteryIndicator.classList.add('hidden');
+                masteryBtn.className = "px-8 py-4 rounded-2xl flex items-center gap-3 font-bold shadow-lg transition-all active:scale-95 border bg-white text-slate-700 border-slate-200 hover:border-blue-300";
+                btnLabel.innerText = "Mark Mastered";
+            }
 
-            <button 
-              onClick={handleNext}
-              className="p-4 rounded-full bg-white shadow-md hover:bg-slate-50 active:scale-90 transition-all text-slate-600"
-            >
-              <ChevronRight size={28} />
-            </button>
-          </div>
+            // Stats
+            const total = cards.length;
+            const count = mastered.size;
+            const pct = Math.round((count / total) * 100);
+            
+            masteryText.innerText = `Mastery: ${count} / ${total}`;
+            progressPercent.innerText = `${pct}%`;
+            progressBar.style.width = `${pct}%`;
+        }
 
-          <div className="text-sm text-slate-400 font-medium">
-             Swipe or use arrows to navigate
-          </div>
-        </div>
-      </main>
+        function toggleFlip() {
+            isFlipped = !isFlipped;
+            document.getElementById('card-inner').classList.toggle('rotate-y-180', isFlipped);
+        }
 
-      <style>{`
-        .perspective-1000 {
-          perspective: 1000px;
+        function nextCard() {
+            resetFlip();
+            setTimeout(() => {
+                currentIndex = (currentIndex + 1) % cards.length;
+                updateUI();
+            }, 150);
         }
-        .backface-hidden {
-          backface-visibility: hidden;
-        }
-        .transform-style-3d {
-          transform-style: preserve-3d;
-        }
-        .rotate-y-180 {
-          transform: rotateY(180deg);
-        }
-      `}</style>
-    </div>
-  );
-};
 
-export default App;
+        function prevCard() {
+            resetFlip();
+            setTimeout(() => {
+                currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+                updateUI();
+            }, 150);
+        }
+
+        function resetFlip() {
+            isFlipped = false;
+            document.getElementById('card-inner').classList.remove('rotate-y-180');
+        }
+
+        function toggleMastered() {
+            const currentQ = cards[currentIndex].question;
+            if (mastered.has(currentQ)) {
+                mastered.delete(currentQ);
+            } else {
+                mastered.add(currentQ);
+            }
+            localStorage.setItem('spsv_mastery', JSON.stringify([...mastered]));
+            updateUI();
+        }
+
+        function shuffleDeck() {
+            resetFlip();
+            setTimeout(() => {
+                cards.sort(() => Math.random() - 0.5);
+                currentIndex = 0;
+                updateUI();
+            }, 150);
+        }
+
+        function resetProgress() {
+            if (confirm("Reset all study progress?")) {
+                mastered.clear();
+                localStorage.removeItem('spsv_mastery');
+                updateUI();
+            }
+        }
+
+        // Swipe Support
+        let touchstartX = 0;
+        let touchendX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            handleGesture();
+        });
+
+        function handleGesture() {
+            if (touchendX < touchstartX - 50) nextCard();
+            if (touchendX > touchstartX + 50) prevCard();
+        }
+
+        // Init on load
+        window.onload = init;
+    </script>
+</body>
+</html>
