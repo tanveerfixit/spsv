@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import { Menu } from 'lucide-react';
 import SettingsMenu from './SettingsMenu';
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
