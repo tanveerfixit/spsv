@@ -1,0 +1,164 @@
+'use client';
+
+import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import { FileText, ChevronRight, CheckCircle, Clock, Lock } from 'lucide-react';
+
+const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+
+const TESTS = [
+  {
+    title: 'Terminology Test',
+    description: 'Test your knowledge of key SPSV industry terms and definitions.',
+    questions: 25,
+    time: '25 mins',
+    available: true
+  },
+  {
+    title: 'Chapter 1 Test',
+    description: 'Assess your understanding of the SPSV industry, NTA role, and licensing.',
+    questions: 10,
+    time: '10 mins',
+    available: true
+  },
+  {
+    title: 'Chapter 2 Test',
+    description: 'Test your knowledge on SPSV driver licensing, rights, and responsibilities.',
+    questions: 30,
+    time: '30 mins',
+    available: true
+  },
+  {
+    title: 'Industry Knowledge Test',
+    description: 'Comprehensive test covering all chapters of the Official Manual.',
+    questions: 54,
+    time: '60 mins',
+    available: false
+  },
+  {
+    title: 'Area Knowledge Test',
+    description: 'Test your knowledge of the local area, routes, and landmarks.',
+    questions: 36,
+    time: '45 mins',
+    available: false
+  },
+  {
+    title: 'Full Mock Exam',
+    description: 'Simulate the real SPSV test with both Industry and Area Knowledge sections.',
+    questions: 90,
+    time: '105 mins',
+    available: false
+  }
+];
+
+export default function AssessmentPage() {
+  const { data: session, status } = useSession();
+  const isAuthenticated = !!session?.user;
+
+  if (status === 'loading') {
+    return (
+      <div className="flex items-center justify-center min-vh-50 py-20">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto">
+      <div className="flex items-center gap-3 mb-8">
+        <div className="w-12 h-12 bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 rounded-xl flex items-center justify-center">
+          <FileText className="w-6 h-6" />
+        </div>
+        <div>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Assessments</h2>
+          <p className="text-gray-600 dark:text-gray-400">Test your knowledge and track your progress</p>
+        </div>
+      </div>
+
+      {!isAuthenticated && (
+        <div className="mb-10 p-8 bg-green-50 dark:bg-green-950/20 border border-green-100 dark:border-green-900/50 rounded-2xl text-center">
+          <div className="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-4">
+            <Lock className="w-6 h-6" />
+          </div>
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Registration Required</h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
+            Practice tests and mock exams are exclusively available for registered users. Create an account to save your scores and unlock all assessments.
+          </p>
+          <div className="flex items-center justify-center gap-4">
+            <Link href="/login" className="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-all">
+              Sign In
+            </Link>
+            <Link href="/signup" className="px-6 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
+              Join Now
+            </Link>
+          </div>
+        </div>
+      )}
+
+      <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 ${!isAuthenticated ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
+        {TESTS.map((test) => {
+          const href = `/assessment/practice-tests/${slugify(test.title)}`;
+          
+          if (!test.available) {
+            return (
+              <div 
+                key={test.title}
+                className="flex flex-col justify-between p-6 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl opacity-70"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold text-gray-900 dark:text-white">{test.title}</h3>
+                    <span className="text-xs font-medium px-2 py-1 bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full">Coming Soon</span>
+                  </div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                    {test.description}
+                  </p>
+                </div>
+                <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                  <div className="flex items-center gap-1">
+                    <CheckCircle className="w-4 h-4" />
+                    <span>{test.questions} Qs</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    <span>{test.time}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          return (
+            <Link 
+              key={test.title}
+              href={href}
+              className="flex flex-col justify-between p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:shadow-md hover:border-green-500 dark:hover:border-green-500 transition-all group"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-semibold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                    {test.title}
+                  </h3>
+                  <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-green-500 transition-colors" />
+                </div>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                  {test.description}
+                </p>
+              </div>
+              <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                <div className="flex items-center gap-1">
+                  <CheckCircle className="w-4 h-4" />
+                  <span>{test.questions} Qs</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Clock className="w-4 h-4" />
+                  <span>{test.time}</span>
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

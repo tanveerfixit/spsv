@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String       @id @default(cuid())
+  name          String?
+  email         String?      @unique
+  password      String?      // Hashed password
+  mobile        String?      // Mobile number
+  resetToken    String?      @unique
+  resetTokenExpires DateTime?
+  role          Role         @default(USER)
+  isBlocked     Boolean      @default(false)
+  isWhitelisted Boolean      @default(false)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  expiresAt     DateTime?    // For 10-day trial
+  testResults   TestResult[]
+}
+
+model TestResult {
+  id               String   @id @default(cuid())
+  userId           String
+  category         String
+  score            Int
+  totalQuestions   Int
+  timeSpentSeconds Int
+  completedAt      DateTime @default(now())
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model SystemSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
