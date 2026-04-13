@@ -29,6 +29,8 @@ export default withAuth(
           pathname === "/" ||
           pathname === "/login" ||
           pathname === "/signup" ||
+          pathname === "/forgot-password" ||
+          pathname === "/reset-password" ||
           pathname.startsWith("/study") ||
           pathname.startsWith("/official-manual") ||
           pathname.startsWith("/api/auth") ||

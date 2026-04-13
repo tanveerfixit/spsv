@@ -13,6 +13,8 @@ model User {
   email         String?      @unique
   password      String?      // Hashed password
   mobile        String?      // Mobile number
+  resetToken    String?      @unique
+  resetTokenExpires DateTime?
   role          Role         @default(USER)
   isBlocked     Boolean      @default(false)
   isWhitelisted Boolean      @default(false)
