@@ -23,6 +23,7 @@ interface Question {
 
 export default function Chapter1Test() {
   const { data: session } = useSession();
+  const user = session?.user;
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
