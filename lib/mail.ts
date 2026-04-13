@@ -24,17 +24,24 @@ export async function sendEmail({ to, subject, text, html, config }: {
       };
     } else {
       // Fetch settings from database using Raw SQL to bypass Prisma Client lock
-      const settings = await prisma.$queryRaw<any[]>`
+      const settings = (await prisma.$queryRaw<any[]>`
         SELECT \`key\`, \`value\` FROM SystemSetting 
         WHERE \`key\` IN ('SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS')
-      `;
+      `) || [];
 
-      const settingsMap = settings.reduce((acc, s) => ({ ...acc, [s.key]: s.value }), {});
+      // Create a map with both exact and lowercase keys for robustness
+      const settingsMap: Record<string, string> = {};
+      settings.forEach(s => {
+        const k = s.key || s.KEY;
+        const v = s.value || s.VALUE;
+        if (k) settingsMap[k] = v;
+      });
 
-      const host = settingsMap['SMTP_HOST'] || process.env.SMTP_HOST;
-      const port = parseInt(settingsMap['SMTP_PORT'] || process.env.SMTP_PORT || '465');
-      const user = settingsMap['SMTP_USER'] || process.env.SMTP_USER;
-      const pass = settingsMap['SMTP_PASS'] || process.env.SMTP_PASS;
+      const host = settingsMap['SMTP_HOST'] || process.env.SMTP_HOST || 'smtp.hostinger.com';
+      const portStr = settingsMap['SMTP_PORT'] || process.env.SMTP_PORT || '465';
+      const port = parseInt(portStr) || 465;
+      const user = settingsMap['SMTP_USER'] || process.env.SMTP_USER || 'noreply@icover.ie';
+      const pass = settingsMap['SMTP_PASS'] || process.env.SMTP_PASS || '';
 
       transporterConfig = {
         host: host,
