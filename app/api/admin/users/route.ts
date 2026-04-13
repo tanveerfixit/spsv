@@ -24,6 +24,7 @@ export async function GET() {
         role: true,
         isBlocked: true,
         isWhitelisted: true,
+        mobile: true,
         createdAt: true,
         expiresAt: true,
       }

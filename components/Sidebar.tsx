@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, BookOpen, FileText, ChevronDown, ChevronRight, LogIn, LogOut, BarChart } from 'lucide-react';
+import { Menu, X, BookOpen, FileText, ChevronDown, ChevronRight, LogIn, LogOut, BarChart, Users } from 'lucide-react';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import SettingsMenu from './SettingsMenu';
 
@@ -270,6 +270,16 @@ export default function Sidebar({ mobileOpen, setMobileOpen }: { mobileOpen: boo
               <BarChart className="w-4 h-4" />
               <span>My Progress</span>
             </Link>
+            {(user as any)?.role === 'ADMIN' && (
+              <Link 
+                href="/admin"
+                onClick={() => setMobileOpen(false)}
+                className={`flex items-center gap-2 p-2 w-full text-left rounded-md transition-colors ${pathname === '/admin' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'}`}
+              >
+                <Users className="w-4 h-4" />
+                <span>Admin Panel</span>
+              </Link>
+            )}
             <button 
               onClick={handleLogout}
               className="flex items-center gap-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 p-2 w-full text-left rounded-md transition-colors"
