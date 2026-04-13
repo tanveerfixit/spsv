@@ -15,19 +15,11 @@ export async function GET() {
   }
 
   try {
-    const users = await prisma.user.findMany({
-      orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        isBlocked: true,
-        isWhitelisted: true,
-        createdAt: true,
-        expiresAt: true,
-      }
-    });
+    const users = await prisma.$queryRaw`
+      SELECT id, name, email, mobile, role, isBlocked, isWhitelisted, createdAt, expiresAt 
+      FROM User 
+      ORDER BY createdAt DESC
+    `;
     return NextResponse.json(users);
   } catch (error) {
     return NextResponse.json({ message: 'Error fetching users' }, { status: 500 });

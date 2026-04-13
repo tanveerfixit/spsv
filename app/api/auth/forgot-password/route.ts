@@ -24,14 +24,13 @@ export async function POST(req: Request) {
     const resetToken = crypto.randomBytes(32).toString('hex');
     const resetTokenExpires = new Date(Date.now() + 3600000); // 1 hour from now
 
-    // Save token to user
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        resetToken,
-        resetTokenExpires,
-      },
-    });
+    // Save token to user using Raw SQL to bypass Prisma Client lock
+    await prisma.$executeRaw`
+      UPDATE User 
+      SET resetToken = ${resetToken}, 
+          resetTokenExpires = ${resetTokenExpires} 
+      WHERE id = ${user.id}
+    `;
 
     const resetUrl = `https://spsv.ie/reset-password?token=${resetToken}`;
 

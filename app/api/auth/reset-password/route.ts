@@ -10,15 +10,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'Token and password are required' }, { status: 400 });
     }
 
-    // Find user by token and ensure token hasn't expired
-    const user = await prisma.user.findFirst({
-      where: {
-        resetToken: token,
-        resetTokenExpires: {
-          gt: new Date(),
-        },
-      },
-    });
+    // Find user by token using Raw SQL
+    const users = await prisma.$queryRaw<any[]>`
+      SELECT id FROM User 
+      WHERE resetToken = ${token} 
+      AND resetTokenExpires > ${new Date()}
+      LIMIT 1
+    `;
+
+    const user = users[0];
 
     if (!user) {
       return NextResponse.json({ message: 'Invalid or expired token' }, { status: 400 });
@@ -27,15 +27,14 @@ export async function POST(req: Request) {
     // Hash the new password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Update user and clear reset token fields
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        password: hashedPassword,
-        resetToken: null,
-        resetTokenExpires: null,
-      },
-    });
+    // Update user and clear reset token fields using Raw SQL
+    await prisma.$executeRaw`
+      UPDATE User 
+      SET password = ${hashedPassword}, 
+          resetToken = NULL, 
+          resetTokenExpires = NULL 
+      WHERE id = ${user.id}
+    `;
 
     return NextResponse.json({ message: 'Password reset successful' });
   } catch (error) {
