@@ -10,3 +10,4 @@ coverage/
 
 # Passenger restart directory
 tmp/
+!tmp/restart.txt
