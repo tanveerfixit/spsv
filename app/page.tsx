@@ -45,7 +45,7 @@ export default function Home() {
         </p>
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-2 gap-4 sm:gap-8">
+      <div className="grid grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-8">
         {cards.map((card) => (
           <Link 
             key={card.title}
@@ -53,23 +53,25 @@ export default function Home() {
             className="group relative flex flex-col p-4 sm:p-8 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl sm:rounded-3xl shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
           >
             {/* Background Decoration */}
-            <div className={`absolute -right-8 -top-8 w-32 h-32 bg-${card.color}-500/5 rounded-full group-hover:scale-150 transition-transform duration-500`} />
+            <div className={`absolute -right-8 -top-8 w-24 sm:w-32 h-24 sm:h-32 bg-${card.color}-500/5 rounded-full group-hover:scale-150 transition-transform duration-500`} />
             
-            <div className="flex items-start justify-between mb-2 sm:mb-6">
+            <div className="flex items-start justify-between mb-3 sm:mb-6">
               <div className={`p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-${card.color}-50 dark:bg-${card.color}-900/30 text-${card.color}-600 dark:text-${card.color}-400 group-hover:rotate-6 transition-transform`}>
-                {React.cloneElement(card.icon as React.ReactElement, { className: "w-5 h-5 sm:w-8 sm:h-8" })}
+                <div className="scale-75 sm:scale-100">
+                  {card.icon}
+                </div>
               </div>
-              <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white group-hover:translate-x-1 transition-all" />
+              <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6 text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white group-hover:translate-x-1 transition-all" />
             </div>
 
-            <h3 className="text-lg sm:text-2xl font-bold mb-1 sm:mb-3 text-gray-900 dark:text-white leading-tight">
+            <h3 className="text-base sm:text-2xl font-bold mb-1 sm:mb-3 text-gray-900 dark:text-white line-clamp-1 sm:line-clamp-none">
               {card.title}
             </h3>
-            <p className="text-xs sm:text-base text-gray-600 dark:text-gray-400 leading-tight sm:leading-relaxed line-clamp-2 sm:line-clamp-none">
+            <p className="text-[10px] sm:text-base text-gray-600 dark:text-gray-400 leading-tight sm:leading-relaxed line-clamp-2 sm:line-clamp-none">
               {card.description}
             </p>
 
-            <div className={`mt-8 w-12 h-1 bg-${card.color}-500 rounded-full group-hover:w-full transition-all duration-500`} />
+            <div className={`mt-4 sm:mt-8 w-8 sm:w-12 h-0.5 sm:h-1 bg-${card.color}-500 rounded-full group-hover:w-full transition-all duration-500`} />
           </Link>
         ))}
       </div>
