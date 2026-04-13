@@ -8,12 +8,12 @@ To use your Hostinger MySQL database, update your `.env` file or environment var
 
 **Connection URL:**
 ```env
-DATABASE_URL="mysql://u583652021_userspsv:Tani%408877%21%21@localhost:3306/u583652021_spsv"
+DATABASE_URL="mysql://u583652021_userspsv:Tani8877@77.37.35.183:3306/u583652021_spsv"
 ```
 
 > [!IMPORTANT]
-> - Ensure you use `localhost` if the application is running on the same Hostinger server as the database.
-> - The password `Tani@8877!!` must be URL-encoded as `Tani%408877%21%21` in the connection string.
+> - Ensure you use `localhost` if the application is running on the same Hostinger server as the database, or `77.37.35.183` if connecting remotely.
+> - The password is now: `Tani8877`.
 > - Make sure the user `u583652021_userspsv` has full privileges on the `u583652021_spsv` database.
 
 ---
