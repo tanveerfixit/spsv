@@ -34,7 +34,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <button onClick={() => setMobileOpen(true)} className="p-1 mr-3 text-gray-700 dark:text-gray-300">
               <Menu className="w-6 h-6" />
             </button>
-            <h1 className="font-semibold text-gray-900 dark:text-white">SPSV Study & Test</h1>
+            <Link href="/" onClick={() => setMobileOpen(false)}>
+              <h1 className="font-semibold text-gray-900 dark:text-white">SPSV Study & Test</h1>
+            </Link>
           </div>
           <SettingsMenu />
         </header>
