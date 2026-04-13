@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/admin', '/api', '/dashboard'],
     },
-    sitemap: 'https://spsv.ie/sitemap.xml',
+    sitemap: 'https://spsv.clarelab.com/sitemap.xml',
   };
 }

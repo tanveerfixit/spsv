@@ -1,5 +1,12 @@
 import Link from 'next/link';
 import { BookOpen, ChevronRight } from 'lucide-react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'SPSV Official Manual Study Guide | Industry Knowledge Ireland',
+  description: 'Comprehensive study guide for the SPSV Official Manual. Master all 11 chapters for the Industry Knowledge test.',
+  keywords: 'SPSV manual, taxi theory manual ireland, study industry knowledge test, NTA official manual',
+};
 
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 

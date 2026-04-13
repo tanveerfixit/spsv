@@ -9,17 +9,20 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'SPSV Study & Mock Test - Industry Knowledge Ireland',
-  description: 'The definitive platform for SPSV Industry and Area Knowledge Test preparation in Ireland. Access calculations, regulations, and full mock exams to pass your SPSV driver licence test with confidence.',
-  keywords: 'SPSV test, SPSV mock exam, Industry Knowledge Test Ireland, Area Knowledge ireland, SPSV manual study, SPSV driver license, NTA test preparation',
-  authors: [{ name: 'SPSV Study Platform' }],
-  creator: 'SPSV Study Platform',
-  publisher: 'SPSV Study Platform',
-  metadataBase: new URL('https://spsv.ie'), // Replace with actual production URL
+  title: 'SPSV Study & Mock Test - Pass Your NTA Driver Entrance Test',
+  description: 'The definitive platform for SPSV Industry and Area Knowledge Test preparation in Ireland. Expert-led study guides, calculations, and full-length mock exams.',
+  keywords: 'SPSV test, SPSV mock exam, taxi theory test Ireland, Industry Knowledge Test, Area Knowledge Ireland, SPSV manual study, NTA test preparation, Irish taxi license',
+  authors: [{ name: 'SPSV Study & Test' }],
+  creator: 'SPSV Study & Test',
+  publisher: 'SPSV Study & Test',
+  metadataBase: new URL('https://spsv.clarelab.com'),
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
-    title: 'Pass your SPSV Test with Confidence',
+    title: 'SPSV Study & Mock Test - Industry Knowledge Ireland',
     description: 'Expert-led study guides and full-length mock exams for the Irish SPSV Driver Entrance Test.',
-    url: 'https://spsv.ie',
+    url: 'https://spsv.clarelab.com',
     siteName: 'SPSV Study & Test',
     locale: 'en_IE',
     type: 'website',

@@ -1,7 +1,27 @@
-import Link from 'next/link';
 import { BookOpen, List, GraduationCap, BarChart, ChevronRight } from 'lucide-react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'SPSV Study & Mock Test | Pass Your Irish Taxi Test',
+  description: 'The #1 platform for Irish SPSV Industry and Area Knowledge Test preparation. Mock exams, study guides, and progress tracking for NTA driver candidates.',
+};
 
 export default function Home() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": "SPSV Study & Test Ireland",
+    "description": "Comprehensive preparation platform for the Irish SPSV Driver Entrance Test.",
+    "url": "https://spsv.clarelab.com",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "EUR"
+    }
+  };
+
   const cards = [
     {
       title: 'Start Study',
@@ -35,6 +55,10 @@ export default function Home() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="text-center mb-16">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-gray-900 dark:text-white tracking-tight">
           Master Your <span className="text-blue-600">SPSV Test</span>
