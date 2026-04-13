@@ -12,6 +12,7 @@ interface User {
   role: string;
   isBlocked: boolean;
   isWhitelisted: boolean;
+  mobile: string | null;
   createdAt: string;
   expiresAt: string | null;
 }
@@ -65,7 +66,8 @@ export default function AdminPage() {
 
   const filteredUsers = users.filter((u) =>
     u.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    u.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    u.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    u.mobile?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (status === 'loading' || loading) {
@@ -104,7 +106,7 @@ export default function AdminPage() {
           <table className="w-full text-left">
             <thead>
               <tr className="bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700">
-                <th className="p-4 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">User</th>
+                <th className="p-4 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Contact</th>
                 <th className="p-4 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
                 <th className="p-4 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Trial Expires</th>
                 <th className="p-4 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-right">Actions</th>
@@ -117,6 +119,7 @@ export default function AdminPage() {
                     <div className="flex flex-col">
                       <span className="font-bold text-gray-900 dark:text-white">{user.name || 'No Name'}</span>
                       <span className="text-sm text-gray-500 dark:text-gray-400">{user.email}</span>
+                      <span className="text-sm font-medium text-blue-600 dark:text-blue-400 mt-0.5">{user.mobile || 'No Mobile'}</span>
                       <span className="text-[10px] mt-1 px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 w-fit font-bold uppercase tracking-wider">
                         {user.role}
                       </span>

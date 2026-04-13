@@ -7,28 +7,28 @@ export default function Home() {
       title: 'Start Study',
       description: 'Review the Official Manual chapters and build your foundation.',
       href: '/study',
-      icon: <BookOpen className="w-8 h-8" />,
+      icon: <BookOpen className="w-6 h-6 sm:w-8 sm:h-8" />,
       color: 'blue',
     },
     {
       title: 'Chapter wise test',
       description: 'Practice specific chapters to master individual sections.',
       href: '/assessment',
-      icon: <List className="w-8 h-8" />,
+      icon: <List className="w-6 h-6 sm:w-8 sm:h-8" />,
       color: 'green',
     },
     {
       title: 'Full Mock Test',
       description: 'Simulate the real exam with a full timed mock test.',
       href: '/assessment',
-      icon: <GraduationCap className="w-8 h-8" />,
+      icon: <GraduationCap className="w-6 h-6 sm:w-8 sm:h-8" />,
       color: 'purple',
     },
     {
       title: 'My Progress',
       description: 'Track your scores and see your improvement over time.',
       href: '/dashboard',
-      icon: <BarChart className="w-8 h-8" />,
+      icon: <BarChart className="w-6 h-6 sm:w-8 sm:h-8" />,
       color: 'orange',
     },
   ];
@@ -50,13 +50,13 @@ export default function Home() {
           <Link 
             key={card.title}
             href={card.href}
-            className="group relative flex flex-col p-8 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-3xl shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+            className="group relative flex flex-col p-6 sm:p-8 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-3xl shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
           >
             {/* Background Decoration */}
             <div className={`absolute -right-8 -top-8 w-32 h-32 bg-${card.color}-500/5 rounded-full group-hover:scale-150 transition-transform duration-500`} />
             
-            <div className="flex items-start justify-between mb-6">
-              <div className={`p-4 rounded-2xl bg-${card.color}-50 dark:bg-${card.color}-900/30 text-${card.color}-600 dark:text-${card.color}-400 group-hover:rotate-6 transition-transform`}>
+            <div className="flex items-start justify-between mb-4 sm:mb-6">
+              <div className={`p-3 sm:p-4 rounded-2xl bg-${card.color}-50 dark:bg-${card.color}-900/30 text-${card.color}-600 dark:text-${card.color}-400 group-hover:rotate-6 transition-transform`}>
                 {card.icon}
               </div>
               <ChevronRight className="w-6 h-6 text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white group-hover:translate-x-1 transition-all" />

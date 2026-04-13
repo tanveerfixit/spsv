@@ -5,7 +5,7 @@ import { sendEmail } from '@/lib/mail';
 
 export async function POST(req: Request) {
   try {
-    const { name, email, password } = await req.json();
+    const { name, email, password, mobile } = await req.json();
 
     if (!name || !email || !password) {
       return NextResponse.json({ message: 'Missing fields' }, { status: 400 });
@@ -37,6 +37,7 @@ export async function POST(req: Request) {
         name,
         email,
         password: hashedPassword,
+        mobile,
         role,
         expiresAt: isAdmin ? null : expiresAt, // Admins don't have trial expiration
         isWhitelisted: isAdmin, // Admins are whitelisted
