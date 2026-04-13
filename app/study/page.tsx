@@ -13,7 +13,7 @@ const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-')
 const CHAPTERS = [
   {
     title: 'Introduction',
-    subCategories: ['Welcome', 'Terminology']
+    subCategories: ['Welcome']
   },
   {
     title: 'Chapter 1: The SPSV industry',

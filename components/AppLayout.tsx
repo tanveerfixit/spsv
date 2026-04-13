@@ -19,7 +19,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       if (lastPage && lastPage !== '/' && pathname === '/') {
         router.push(lastPage);
       }
-      setIsInitialLoad(false);
+      if (isInitialLoad) {
+        setIsInitialLoad(false);
+      }
     } else {
       localStorage.setItem('lastVisitedPage', pathname);
     }

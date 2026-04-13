@@ -14,7 +14,7 @@ const SPSV_DATA = [
     categories: [
       {
         title: 'Introduction',
-        subCategories: ['Welcome', 'Terminology']
+        subCategories: ['Welcome']
       },
       {
         title: 'Chapter 1: The SPSV industry',
@@ -170,8 +170,8 @@ export default function Sidebar({ mobileOpen, setMobileOpen }: { mobileOpen: boo
   const pathname = usePathname();
   const { data: session } = useSession();
   const user = session?.user;
-  const [expandedTopics, setExpandedTopics] = useState<Record<string, boolean>>({ 'Official Manual': true });
-  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({ 'Chapter 1: The SPSV industry': true, 'Introduction': true });
+  const [expandedTopics, setExpandedTopics] = useState<Record<string, boolean>>({});
+  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
 
   const toggleTopic = (title: string) => {
     setExpandedTopics(prev => ({ ...prev, [title]: !prev[title] }));
