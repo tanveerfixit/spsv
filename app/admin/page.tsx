@@ -280,7 +280,8 @@ export default function AdminPage() {
         </div>
         {filteredUsers.length === 0 && (
           <div className="p-12 text-center text-gray-500 dark:text-gray-400">No users found match your search.</div>
-        </div>
+        )}
+      </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl p-8">
