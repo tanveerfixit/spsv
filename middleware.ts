@@ -29,6 +29,8 @@ export default withAuth(
           pathname === "/" ||
           pathname === "/login" ||
           pathname === "/signup" ||
+          pathname.startsWith("/study") ||
+          pathname.startsWith("/official-manual") ||
           pathname.startsWith("/api/auth") ||
           pathname.startsWith("/_next") ||
           pathname.includes("favicon.ico")

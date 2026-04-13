@@ -1,5 +1,8 @@
+'use client';
+
 import Link from 'next/link';
-import { FileText, ChevronRight, CheckCircle, Clock } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { FileText, ChevronRight, CheckCircle, Clock, Lock } from 'lucide-react';
 
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
@@ -49,6 +52,17 @@ const TESTS = [
 ];
 
 export default function AssessmentPage() {
+  const { data: session, status } = useSession();
+  const isAuthenticated = !!session?.user;
+
+  if (status === 'loading') {
+    return (
+      <div className="flex items-center justify-center min-vh-50 py-20">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto">
       <div className="flex items-center gap-3 mb-8">
@@ -61,7 +75,27 @@ export default function AssessmentPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {!isAuthenticated && (
+        <div className="mb-10 p-8 bg-green-50 dark:bg-green-950/20 border border-green-100 dark:border-green-900/50 rounded-2xl text-center">
+          <div className="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-4">
+            <Lock className="w-6 h-6" />
+          </div>
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Registration Required</h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
+            Practice tests and mock exams are exclusively available for registered users. Create an account to save your scores and unlock all assessments.
+          </p>
+          <div className="flex items-center justify-center gap-4">
+            <Link href="/login" className="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-all">
+              Sign In
+            </Link>
+            <Link href="/signup" className="px-6 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
+              Join Now
+            </Link>
+          </div>
+        </div>
+      )}
+
+      <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 ${!isAuthenticated ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
         {TESTS.map((test) => {
           const href = `/assessment/practice-tests/${slugify(test.title)}`;
           
