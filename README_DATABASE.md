@@ -8,7 +8,7 @@ To use your Hostinger MySQL database, update your `.env` file or environment var
 
 **Connection URL:**
 ```env
-DATABASE_URL="mysql://u583652021_userspsv:Tani8877@77.37.35.183:3306/u583652021_spsv"
+DATABASE_URL="mysql://u583652021_userspsv:Tani8877@localhost:3306/u583652021_spsv"
 ```
 
 > [!IMPORTANT]
