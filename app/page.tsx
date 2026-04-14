@@ -1,5 +1,6 @@
 import { BookOpen, List, GraduationCap, BarChart, ChevronRight } from 'lucide-react';
 import { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'SPSV Study & Mock Test | Pass Your Irish Taxi Test',
@@ -54,51 +55,51 @@ export default function Home() {
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-12">
+    <div className="max-w-5xl mx-auto px-4 py-8 md:py-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="text-center mb-16">
-        <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-gray-900 dark:text-white tracking-tight">
+      <div className="text-center mb-10 md:mb-16">
+        <h2 className="text-3xl md:text-5xl font-extrabold mb-4 md:mb-6 text-gray-900 dark:text-white tracking-tight px-2">
           Master Your <span className="text-blue-600">SPSV Test</span>
         </h2>
-        <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-base md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed px-4">
           Your comprehensive platform for SPSV Industry and Area Knowledge preparation. 
           Follow the path from theory to practice and track your success.
         </p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-2 md:grid-cols-2 gap-3 sm:gap-6 md:gap-8">
         {cards.map((card) => (
           <Link 
             key={card.title}
             href={card.href}
-            className="group relative flex flex-col p-6 sm:p-8 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-3xl shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+            className="group relative flex flex-col p-4 sm:p-8 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl sm:rounded-3xl shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
           >
             {/* Background Decoration */}
             <div className={`absolute -right-8 -top-8 w-32 h-32 bg-${card.color}-500/5 rounded-full group-hover:scale-150 transition-transform duration-500`} />
             
-            <div className="flex items-start justify-between mb-4 sm:mb-6">
-              <div className={`p-3 sm:p-4 rounded-2xl bg-${card.color}-50 dark:bg-${card.color}-900/30 text-${card.color}-600 dark:text-${card.color}-400 group-hover:rotate-6 transition-transform`}>
+            <div className="flex items-start justify-between mb-3 sm:mb-6">
+              <div className={`p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-${card.color}-50 dark:bg-${card.color}-900/30 text-${card.color}-600 dark:text-${card.color}-400 group-hover:rotate-6 transition-transform`}>
                 {card.icon}
               </div>
-              <ChevronRight className="w-6 h-6 text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white group-hover:translate-x-1 transition-all" />
+              <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white group-hover:translate-x-1 transition-all" />
             </div>
 
-            <h3 className="text-2xl font-bold mb-3 text-gray-900 dark:text-white">
+            <h3 className="text-lg sm:text-2xl font-bold mb-1 sm:mb-3 text-gray-900 dark:text-white">
               {card.title}
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+            <p className="text-xs sm:text-base text-gray-600 dark:text-gray-400 leading-tight sm:leading-relaxed line-clamp-2 sm:line-clamp-none">
               {card.description}
             </p>
 
-            <div className={`mt-8 w-12 h-1 bg-${card.color}-500 rounded-full group-hover:w-full transition-all duration-500`} />
+            <div className={`mt-4 sm:mt-8 w-10 sm:w-12 h-1 bg-${card.color}-500 rounded-full group-hover:w-full transition-all duration-500`} />
           </Link>
         ))}
       </div>
 
-      <div className="mt-20 p-8 rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white text-center shadow-xl shadow-blue-500/20">
+      <div className="mt-12 md:mt-20 p-6 md:p-8 rounded-2xl md:rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white text-center shadow-xl shadow-blue-500/20">
         <h3 className="text-2xl font-bold mb-2">Ready to take a full test?</h3>
         <p className="text-blue-100 mb-6">Test your knowledge with our integrated mock examination system.</p>
         <Link 

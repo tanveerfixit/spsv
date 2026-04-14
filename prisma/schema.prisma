@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "rhel-openssl-1.1.x"]
 }
 
 datasource db {
@@ -15,7 +16,7 @@ model User {
   mobile        String?      // Mobile number
   resetToken    String?      @unique
   resetTokenExpires DateTime?
-  role          Role         @default(USER)
+  role          String       @default("USER")
   isBlocked     Boolean      @default(false)
   isWhitelisted Boolean      @default(false)
   createdAt     DateTime     @default(now())
@@ -37,15 +38,16 @@ model TestResult {
   @@index([userId])
 }
 
-enum Role {
-  USER
-  ADMIN
-}
+// Role enum replaced with String for SQLite compatibility
+// enum Role {
+//   USER
+//   ADMIN
+// }
 
 model SystemSetting {
   id        String   @id @default(cuid())
   key       String   @unique
-  value     String   @db.Text
+  value     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

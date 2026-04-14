@@ -1,5 +1,5 @@
 import React from 'react';
-import Terminology from '@/components/content/Terminology';
+import Introduction from '@/components/content/Introduction';
 import TerminologyTest from '@/components/content/TerminologyTest';
 import Chapter1 from '@/components/content/Chapter1';
 import Chapter1Test from '@/components/content/Chapter1Test';
@@ -9,8 +9,8 @@ export default async function ContentPage({ params }: { params: Promise<{ slug: 
   const resolvedParams = await params;
   const slugPath = resolvedParams.slug.join('/');
 
-  if (slugPath === 'official-manual/introduction/terminology') {
-    return <Terminology />;
+  if (slugPath === 'official-manual/introduction/welcome' || slugPath === 'official-manual/introduction/terminology') {
+    return <Introduction />;
   }
 
   if (slugPath === 'assessment/practice-tests/terminology-test') {

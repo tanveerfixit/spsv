@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { Clock, CheckCircle, Target, TrendingUp, AlertCircle, Loader2 } from 'lucide-react';
 
 interface TestResult {
@@ -58,12 +59,12 @@ export default function DashboardPage() {
           Sign in to your account to save your test scores, view statistics, and identify areas for improvement.
         </p>
         <div className="flex items-center justify-center gap-4">
-          <a href="/login" className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-500/20">
+          <Link href="/login" className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-500/20">
             Sign In
-          </a>
-          <a href="/signup" className="px-8 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
+          </Link>
+          <Link href="/signup" className="px-8 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
             Create Account
-          </a>
+          </Link>
         </div>
       </div>
     );
