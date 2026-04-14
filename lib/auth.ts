@@ -16,15 +16,23 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Please enter an email and password');
         }
 
+        const startTime = Date.now();
+        
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
+        
+        const dbQueryTime = Date.now() - startTime;
+        console.log(`[Auth Profile] DB lookup for ${credentials.email} took ${dbQueryTime}ms`);
 
         if (!user || !user.password) {
           throw new Error('No user found with this email');
         }
 
+        const bcryptStart = Date.now();
         const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password);
+        const bcryptTime = Date.now() - bcryptStart;
+        console.log(`[Auth Profile] Bcrypt compare took ${bcryptTime}ms (Native: ${bcrypt.constructor.name})`);
 
         if (!isPasswordCorrect) {
           throw new Error('Incorrect password');
