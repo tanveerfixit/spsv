@@ -253,13 +253,16 @@ function AuthPageContent() {
             >
               {success ? (
                 <CheckCircle className="w-6 h-6 animate-bounce" />
-              ) : loading ? (
+              ) : loading && (
                 <Loader2 className="w-6 h-6 animate-spin" />
-              ) : (
-                mode === 'login' ? 'Sign In Now' : 'Create My Account'
               )}
               <span className="text-lg">
-                {success ? 'Redirecting...' : mode === 'login' ? 'Sign In' : 'Sign Up'}
+                {success 
+                  ? 'Redirecting...' 
+                  : loading 
+                    ? (mode === 'login' ? 'Signing In...' : 'Registering...') 
+                    : (mode === 'login' ? 'Sign In' : 'Create Account')
+                }
               </span>
             </button>
           </form>
