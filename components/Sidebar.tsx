@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, BookOpen, FileText, ChevronDown, ChevronRight, LogIn, LogOut, BarChart, Users } from 'lucide-react';
+import { Menu, X, BookOpen, FileText, ChevronDown, ChevronRight, LogIn, LogOut, BarChart, Users, HelpCircle } from 'lucide-react';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import SettingsMenu from './SettingsMenu';
 
@@ -259,6 +259,15 @@ export default function Sidebar({ mobileOpen, setMobileOpen }: { mobileOpen: boo
       </div>
 
       <div className="p-4 border-t border-gray-200 dark:border-gray-800">
+        <Link 
+          href="/faq"
+          onClick={() => setMobileOpen(false)}
+          className={`flex items-center gap-2 p-2 mb-2 w-full text-left rounded-md transition-colors ${pathname === '/faq' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'}`}
+        >
+          <HelpCircle className="w-4 h-4" />
+          <span>General FAQ</span>
+        </Link>
+
         {user ? (
           <div className="flex flex-col gap-2">
             <span className="text-gray-600 dark:text-gray-400 truncate mb-2">{user.email}</span>

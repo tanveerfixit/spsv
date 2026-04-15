@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Users, Shield, ShieldOff, Edit, Trash2, Search, Loader2, CheckCircle, XCircle, Clock, Mail, Server, Key, Send, Eye, EyeOff, Settings, Activity, BarChart3, ClipboardList, TrendingUp, User as UserIcon, X } from 'lucide-react';
+import { Users, Shield, ShieldOff, Edit, Trash2, Search, Loader2, CheckCircle, XCircle, Clock, Mail, Server, Key, Send, Eye, EyeOff, Settings, Activity, BarChart3, ClipboardList, TrendingUp, User as UserIcon, X, HelpCircle, Plus, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface User {
   id: string;
@@ -40,6 +40,15 @@ interface UserStats {
   }[];
 }
 
+interface FAQ {
+  id: string;
+  question: string;
+  answer: string;
+  category: string;
+  order: number;
+  updatedAt: string;
+}
+
 export default function AdminPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -47,13 +56,25 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [updating, setUpdating] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'users' | 'smtp'>('users');
+  const [activeTab, setActiveTab] = useState<'users' | 'smtp' | 'faq'>('users');
 
   // Stats State
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [stats, setStats] = useState<UserStats | null>(null);
   const [loadingStats, setLoadingStats] = useState(false);
   const [showStatsModal, setShowStatsModal] = useState(false);
+
+  // FAQ State
+  const [faqs, setFaqs] = useState<FAQ[]>([]);
+  const [faqLoading, setFaqLoading] = useState(false);
+  const [editingFaq, setEditingFaq] = useState<FAQ | null>(null);
+  const [isAddingFaq, setIsAddingFaq] = useState(false);
+  const [faqForm, setFaqForm] = useState({
+    question: '',
+    answer: '',
+    category: 'General',
+    order: 0
+  });
 
   // SMTP State
   const [smtpConfig, setSmtpConfig] = useState({
@@ -74,8 +95,84 @@ export default function AdminPage() {
     } else if (status === 'authenticated') {
       fetchUsers();
       fetchSmtpConfig();
+      fetchFaqs();
     }
   }, [status, session, router]);
+
+  const fetchFaqs = async () => {
+    setFaqLoading(true);
+    try {
+      const res = await fetch('/api/admin/faq');
+      if (res.ok) {
+        const data = await res.json();
+        setFaqs(data);
+      }
+    } catch (error) {
+      console.error('Error fetching FAQs:', error);
+    } finally {
+      setFaqLoading(false);
+    }
+  };
+
+  const handleCreateFaq = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFaqLoading(true);
+    try {
+      const res = await fetch('/api/admin/faq', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(faqForm),
+      });
+      if (res.ok) {
+        await fetchFaqs();
+        setIsAddingFaq(false);
+        setFaqForm({ question: '', answer: '', category: 'General', order: 0 });
+      }
+    } catch (error) {
+      console.error('Error creating FAQ:', error);
+    } finally {
+      setFaqLoading(false);
+    }
+  };
+
+  const handleUpdateFaq = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingFaq) return;
+    setFaqLoading(true);
+    try {
+      const res = await fetch(`/api/admin/faq/${editingFaq.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(faqForm),
+      });
+      if (res.ok) {
+        await fetchFaqs();
+        setEditingFaq(null);
+        setFaqForm({ question: '', answer: '', category: 'General', order: 0 });
+      }
+    } catch (error) {
+      console.error('Error updating FAQ:', error);
+    } finally {
+      setFaqLoading(false);
+    }
+  };
+
+  const handleDeleteFaq = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this FAQ?')) return;
+    setFaqLoading(true);
+    try {
+      const res = await fetch(`/api/admin/faq/${id}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        await fetchFaqs();
+      }
+    } catch (error) {
+      console.error('Error deleting FAQ:', error);
+    } finally {
+      setFaqLoading(false);
+    }
+  };
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -231,6 +328,13 @@ export default function AdminPage() {
             <Settings className="w-4 h-4" />
             SMTP Settings
           </button>
+          <button
+            onClick={() => setActiveTab('faq')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'faq' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'}`}
+          >
+            <HelpCircle className="w-4 h-4" />
+            FAQ Manager
+          </button>
         </div>
 
         {activeTab === 'users' && (
@@ -335,7 +439,7 @@ export default function AdminPage() {
           <div className="p-12 text-center text-gray-500 dark:text-gray-400">No users found match your search.</div>
         )}
       </div>
-      ) : (
+      ) : activeTab === 'smtp' ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl p-8">
             <div className="flex items-center gap-3 mb-6">
@@ -458,6 +562,171 @@ export default function AdminPage() {
                 <p className="text-sm font-medium">{smtpMessage.text}</p>
               </div>
             )}
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-8">
+          <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl p-8">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                  <HelpCircle className="w-6 h-6" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">FAQ Management</h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Add or edit questions and answers for the public FAQ page.</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => {
+                  setIsAddingFaq(true);
+                  setEditingFaq(null);
+                  setFaqForm({ question: '', answer: '', category: 'General', order: 0 });
+                }}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-500/20"
+              >
+                <Plus className="w-4 h-4" />
+                Add New FAQ
+              </button>
+            </div>
+
+            {(isAddingFaq || editingFaq) && (
+              <div className="mb-8 p-6 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-2xl animate-in fade-in slide-in-from-top-4 duration-300">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+                  {editingFaq ? 'Edit FAQ Entry' : 'New FAQ Entry'}
+                </h3>
+                <form onSubmit={editingFaq ? handleUpdateFaq : handleCreateFaq} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Category</label>
+                      <input
+                        type="text"
+                        value={faqForm.category}
+                        onChange={(e) => setFaqForm({ ...faqForm, category: e.target.value })}
+                        placeholder="e.g. Registration, Payments, Test Info"
+                        className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Display Order</label>
+                      <input
+                        type="number"
+                        value={faqForm.order}
+                        onChange={(e) => setFaqForm({ ...faqForm, order: parseInt(e.target.value) })}
+                        placeholder="0"
+                        className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Question</label>
+                    <input
+                      type="text"
+                      value={faqForm.question}
+                      onChange={(e) => setFaqForm({ ...faqForm, question: e.target.value })}
+                      placeholder="Enter the question..."
+                      className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Answer</label>
+                    <textarea
+                      value={faqForm.answer}
+                      onChange={(e) => setFaqForm({ ...faqForm, answer: e.target.value })}
+                      placeholder="Enter the detailed answer..."
+                      rows={4}
+                      className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white resize-none"
+                      required
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      type="submit"
+                      disabled={faqLoading}
+                      className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-500/20"
+                    >
+                      {faqLoading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : editingFaq ? 'Update Entry' : 'Save Entry'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setIsAddingFaq(false); setEditingFaq(null); }}
+                      className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-bold rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            <div className="space-y-4">
+              {faqLoading && !isAddingFaq && !editingFaq ? (
+                <div className="py-12 flex justify-center">
+                  <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+                </div>
+              ) : Object.keys(faqs.reduce((acc, faq) => {
+                const cat = faq.category || 'General';
+                if (!acc[cat]) acc[cat] = [];
+                acc[cat].push(faq);
+                return acc;
+              }, {} as Record<string, FAQ[]>)).length > 0 ? (
+                Object.entries(faqs.reduce((acc, faq) => {
+                  const cat = faq.category || 'General';
+                  if (!acc[cat]) acc[cat] = [];
+                  acc[cat].push(faq);
+                  return acc;
+                }, {} as Record<string, FAQ[]>)).sort().map(([category, items]) => (
+                  <div key={category} className="space-y-3">
+                    <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] ml-1 pt-4 first:pt-0">{category}</h3>
+                    <div className="grid grid-cols-1 gap-3">
+                      {items.map((faq) => (
+                        <div key={faq.id} className="group p-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl hover:border-blue-500/30 transition-all shadow-sm">
+                          <div className="flex justify-between gap-4">
+                            <div className="flex-1">
+                              <h4 className="font-bold text-gray-900 dark:text-white mb-1">{faq.question}</h4>
+                              <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">{faq.answer}</p>
+                            </div>
+                            <div className="flex items-start gap-1">
+                              <button 
+                                onClick={() => {
+                                  setEditingFaq(faq);
+                                  setIsAddingFaq(false);
+                                  setFaqForm({
+                                    question: faq.question,
+                                    answer: faq.answer,
+                                    category: faq.category,
+                                    order: faq.order
+                                  });
+                                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                                }}
+                                className="p-2 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              <button 
+                                onClick={() => handleDeleteFaq(faq.id)}
+                                className="p-2 text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="py-20 text-center">
+                  <div className="inline-flex p-4 rounded-full bg-gray-50 dark:bg-gray-800 text-gray-400 mb-4">
+                    <HelpCircle className="w-8 h-8" />
+                  </div>
+                  <p className="text-gray-500">No FAQs found. Add your first question above!</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
