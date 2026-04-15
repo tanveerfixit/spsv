@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Users, Shield, ShieldOff, Edit, Trash2, Search, Loader2, CheckCircle, XCircle, Clock, Mail, Server, Key, Send, Eye, EyeOff, Settings } from 'lucide-react';
+import { Users, Shield, ShieldOff, Edit, Trash2, Search, Loader2, CheckCircle, XCircle, Clock, Mail, Server, Key, Send, Eye, EyeOff, Settings, Activity, BarChart3, ClipboardList, TrendingUp, User as UserIcon, X } from 'lucide-react';
 
 interface User {
   id: string;
@@ -17,6 +17,29 @@ interface User {
   expiresAt: string | null;
 }
 
+interface UserStats {
+  totalTests: number;
+  totalTimeSpent: number;
+  averageScorePercent: number;
+  chapterProgress: {
+    category: string;
+    bestScore: number;
+    totalScore: number;
+    totalQuestions: number;
+    attempts: number;
+    averageScorePercent: number;
+    highestScorePercent: number;
+  }[];
+  recentActivity: {
+    id: string;
+    category: string;
+    score: number;
+    totalQuestions: number;
+    timeSpentSeconds: number;
+    completedAt: string;
+  }[];
+}
+
 export default function AdminPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -25,6 +48,12 @@ export default function AdminPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [updating, setUpdating] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'users' | 'smtp'>('users');
+
+  // Stats State
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [stats, setStats] = useState<UserStats | null>(null);
+  const [loadingStats, setLoadingStats] = useState(false);
+  const [showStatsModal, setShowStatsModal] = useState(false);
 
   // SMTP State
   const [smtpConfig, setSmtpConfig] = useState({
@@ -80,6 +109,23 @@ export default function AdminPage() {
       console.error('Error updating user:', error);
     } finally {
       setUpdating(null);
+    }
+  };
+
+  const fetchUserStats = async (user: User) => {
+    setSelectedUser(user);
+    setLoadingStats(true);
+    setShowStatsModal(true);
+    try {
+      const res = await fetch(`/api/admin/users/${user.id}/stats`);
+      if (res.ok) {
+        const data = await res.json();
+        setStats(data.stats);
+      }
+    } catch (error) {
+      console.error('Error fetching user stats:', error);
+    } finally {
+      setLoadingStats(false);
     }
   };
 
@@ -255,6 +301,13 @@ export default function AdminPage() {
                   <td className="p-4 text-right">
                     <div className="flex items-center justify-end gap-2">
                       <button
+                        onClick={() => fetchUserStats(user)}
+                        className="p-2 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                        title="View Activity & Progress"
+                      >
+                        <Activity className="w-5 h-5" />
+                      </button>
+                      <button
                         onClick={() => handleUpdateUser(user, { isWhitelisted: !user.isWhitelisted })}
                         disabled={updating === user.id}
                         className="p-2 text-gray-400 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors"
@@ -405,6 +458,160 @@ export default function AdminPage() {
                 <p className="text-sm font-medium">{smtpMessage.text}</p>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* User Stats Modal */}
+      {showStatsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-gray-900 w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col border border-gray-200 dark:border-gray-800">
+            {/* Modal Header */}
+            <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                  <UserIcon className="w-6 h-6" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">{selectedUser?.name || 'User Activity'}</h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{selectedUser?.email}</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => { setShowStatsModal(false); setStats(null); }}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors text-gray-500"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="flex-1 overflow-y-auto p-6">
+              {loadingStats ? (
+                <div className="h-64 flex flex-col items-center justify-center gap-4">
+                  <Loader2 className="w-10 h-10 animate-spin text-blue-500" />
+                  <p className="text-gray-500 animate-pulse">Analyzing user performance...</p>
+                </div>
+              ) : stats ? (
+                <div className="space-y-8">
+                  {/* Summary Cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30">
+                      <div className="flex items-center gap-3 mb-2">
+                        <Clock className="w-4 h-4 text-blue-600" />
+                        <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Total Time</span>
+                      </div>
+                      <div className="text-2xl font-black text-gray-900 dark:text-white">
+                        {Math.floor(stats.totalTimeSpent / 60)}m {stats.totalTimeSpent % 60}s
+                      </div>
+                    </div>
+                    <div className="p-4 rounded-2xl bg-green-50 dark:bg-green-900/10 border border-green-100 dark:border-green-900/30">
+                      <div className="flex items-center gap-3 mb-2">
+                        <TrendingUp className="w-4 h-4 text-green-600" />
+                        <span className="text-xs font-bold text-green-600 uppercase tracking-wider">Avg. Score</span>
+                      </div>
+                      <div className="text-2xl font-black text-gray-900 dark:text-white">
+                        {stats.averageScorePercent}%
+                      </div>
+                    </div>
+                    <div className="p-4 rounded-2xl bg-purple-50 dark:bg-purple-900/10 border border-purple-100 dark:border-purple-900/30">
+                      <div className="flex items-center gap-3 mb-2">
+                        <ClipboardList className="w-4 h-4 text-purple-600" />
+                        <span className="text-xs font-bold text-purple-600 uppercase tracking-wider">Total Tests</span>
+                      </div>
+                      <div className="text-2xl font-black text-gray-900 dark:text-white">
+                        {stats.totalTests}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* Chapter Wise Progress */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <BarChart3 className="w-5 h-5 text-blue-600" />
+                        Chapter-wise Progress
+                      </h3>
+                      <div className="space-y-3">
+                        {stats.chapterProgress.length > 0 ? (
+                          stats.chapterProgress.map((cp, idx) => (
+                            <div key={idx} className="p-4 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30">
+                              <div className="flex justify-between items-center mb-2">
+                                <span className="font-bold text-gray-900 dark:text-white capitalize text-sm">{cp.category.replace(/-/g, ' ')}</span>
+                                <span className="text-xs font-bold text-blue-600 bg-blue-100 dark:bg-blue-900/30 px-2 py-0.5 rounded-full">{cp.highestScorePercent}% Best</span>
+                              </div>
+                              <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+                                <div 
+                                  className="bg-blue-600 h-full rounded-full transition-all duration-1000" 
+                                  style={{ width: `${cp.averageScorePercent}%` }}
+                                />
+                              </div>
+                              <div className="flex justify-between mt-1 text-[10px] font-medium text-gray-500 uppercase tracking-wider">
+                                <span>{cp.attempts} Attempts</span>
+                                <span>Avg: {cp.averageScorePercent}%</span>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-sm text-gray-500 italic p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-dashed border-gray-200 dark:border-gray-700">No chapter data available yet.</p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Recent Activity */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <Activity className="w-5 h-5 text-green-600" />
+                        Recent Activity
+                      </h3>
+                      <div className="space-y-3 relative before:absolute before:left-[17px] before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-100 dark:before:bg-gray-800">
+                        {stats.recentActivity.length > 0 ? (
+                          stats.recentActivity.map((ra) => (
+                            <div key={ra.id} className="relative pl-10">
+                              <div className="absolute left-0 top-1.5 w-[35px] h-[35px] rounded-full bg-white dark:bg-gray-900 border-2 border-green-500 flex items-center justify-center z-10">
+                                <CheckCircle className="w-4 h-4 text-green-500" />
+                              </div>
+                              <div className="p-3 rounded-xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
+                                <div className="flex justify-between items-start">
+                                  <div>
+                                    <h4 className="text-sm font-bold text-gray-900 dark:text-white capitalize">{ra.category.replace(/-/g, ' ')}</h4>
+                                    <p className="text-[11px] text-gray-500 mt-0.5">{new Date(ra.completedAt).toLocaleString()}</p>
+                                  </div>
+                                  <div className="text-right">
+                                    <span className={`text-sm font-black ${ (ra.score / ra.totalQuestions) >= 0.8 ? 'text-green-600' : 'text-blue-600'}`}>
+                                      {ra.score}/{ra.totalQuestions}
+                                    </span>
+                                    <p className="text-[10px] text-gray-400 mt-0.5">{ra.timeSpentSeconds}s spent</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="p-8 text-center bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700">
+                            <p className="text-sm text-gray-500 italic">No recent test activity found.</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <p className="text-gray-500">Failed to load statistics.</p>
+                </div>
+              )}
+            </div>
+            
+            {/* Modal Footer */}
+            <div className="p-6 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30 flex justify-end">
+              <button 
+                onClick={() => { setShowStatsModal(false); setStats(null); }}
+                className="px-6 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold rounded-xl hover:opacity-90 transition-all"
+              >
+                Close Insights
+              </button>
+            </div>
           </div>
         </div>
       )}
