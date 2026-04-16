@@ -9,20 +9,20 @@ datasource db {
 }
 
 model User {
-  id            String       @id @default(cuid())
-  name          String?
-  email         String?      @unique
-  password      String?      // Hashed password
-  mobile        String?      // Mobile number
-  resetToken    String?      @unique
+  id                String       @id @default(cuid())
+  name              String?
+  email             String?      @unique
+  password          String?
+  mobile            String?
+  resetToken        String?      @unique
   resetTokenExpires DateTime?
-  role          String       @default("USER")
-  isBlocked     Boolean      @default(false)
-  isWhitelisted Boolean      @default(false)
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  expiresAt     DateTime?    // For 10-day trial
-  testResults   TestResult[]
+  role              String       @default("USER")
+  isBlocked         Boolean      @default(false)
+  isWhitelisted     Boolean      @default(false)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  expiresAt         DateTime?
+  testResults       TestResult[]
 }
 
 model TestResult {
@@ -37,12 +37,6 @@ model TestResult {
 
   @@index([userId])
 }
-
-// Role enum replaced with String for SQLite compatibility
-// enum Role {
-//   USER
-//   ADMIN
-// }
 
 model SystemSetting {
   id        String   @id @default(cuid())
