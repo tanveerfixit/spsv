@@ -92,12 +92,12 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="mt-12 md:mt-20 p-6 md:p-8 rounded-2xl md:rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white text-center shadow-xl shadow-blue-500/20">
-        <h3 className="text-2xl font-bold mb-2">Ready to take a full test?</h3>
-        <p className="text-blue-100 mb-6">Test your knowledge with our integrated mock examination system.</p>
+      <div className="mt-8 md:mt-16 p-6 md:p-10 rounded-3xl border border-gray-100 dark:border-gray-800 text-center">
+        <h3 className="text-xl md:text-2xl font-bold mb-1 text-gray-900 dark:text-white">Ready to take a full test?</h3>
+        <p className="text-gray-500 dark:text-gray-400 text-sm md:text-base mb-6">Test your knowledge with our integrated mock examination system.</p>
         <Link 
           href="/assessment" 
-          className="inline-flex items-center px-8 py-3 bg-white text-blue-600 font-bold rounded-xl hover:bg-blue-50 transition-colors"
+          className="inline-flex items-center px-8 py-2.5 bg-blue-600 text-white rounded-xl font-bold text-sm md:text-base hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/25 border border-blue-400/20"
         >
           Take Full Mock Now
         </Link>
