@@ -1,6 +1,7 @@
 import { BookOpen, List, GraduationCap, BarChart, ChevronRight } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
+import HomeHero from '@/components/HomeHero';
 
 export const metadata: Metadata = {
   title: 'SPSV Study & Mock Test | Pass Your Irish Taxi Test',
@@ -60,15 +61,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="text-center mb-10 md:mb-16">
-        <h2 className="text-3xl md:text-5xl font-extrabold mb-4 md:mb-6 text-gray-900 dark:text-white tracking-tight px-2">
-          Master Your <span className="text-blue-600">SPSV Test</span>
-        </h2>
-        <p className="text-base md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed px-4">
-          Your comprehensive platform for SPSV Industry and Area Knowledge preparation. 
-          Follow the path from theory to practice and track your success.
-        </p>
-      </div>
+      <HomeHero />
       
       <div className="grid grid-cols-2 md:grid-cols-2 gap-3 sm:gap-6 md:gap-8">
         {cards.map((card) => (
