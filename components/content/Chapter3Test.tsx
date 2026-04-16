@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { terminologyData } from '@/lib/data/terminologyQuestions';
+import { chapter3Questions } from '@/lib/data/chapter3Questions';
 import { useSession } from 'next-auth/react';
 
 // Helper to shuffle array
@@ -21,7 +21,7 @@ interface Question {
   correctAnswer: string;
 }
 
-export default function TerminologyTest() {
+export default function Chapter3Test() {
   const { data: session } = useSession();
   const user = session?.user;
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -38,8 +38,8 @@ export default function TerminologyTest() {
   }, []);
 
   const startNewTest = () => {
-    // Shuffle the hardcoded questions and use all of them
-    const shuffledQuestions = shuffleArray(terminologyData as any).map((q: any) => ({
+    // Shuffle questions and options
+    const shuffledQuestions = shuffleArray(chapter3Questions).map((q: any) => ({
       ...q,
       options: shuffleArray(q.options)
     }));
@@ -82,7 +82,7 @@ export default function TerminologyTest() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          category: 'Terminology Test',
+          category: 'Chapter 3 Test',
           score: score + (selectedAnswer === questions[currentQuestionIndex].correctAnswer ? 1 : 0),
           totalQuestions: questions.length,
           timeSpentSeconds,
@@ -132,7 +132,7 @@ export default function TerminologyTest() {
     <div className="max-w-3xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
         <div className="flex items-center gap-2">
-          <h2 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">Terminology Test</h2>
+          <h2 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">Chapter 3 Test</h2>
           <span className="text-[10px] font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-md whitespace-nowrap">
             {currentQuestionIndex + 1} / {questions.length}
           </span>

@@ -56,7 +56,7 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [updating, setUpdating] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'users' | 'smtp' | 'faq'>('users');
+  const [activeTab, setActiveTab] = useState<'users' | 'smtp' | 'faq' | 'system'>('users');
 
   // Stats State
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -88,6 +88,10 @@ export default function AdminPage() {
   const [smtpLoading, setSmtpLoading] = useState(false);
   const [testLoading, setTestLoading] = useState(false);
   const [smtpMessage, setSmtpMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+  
+  // Notice State
+  const [noticeText, setNoticeText] = useState('');
+  const [noticeLoading, setNoticeLoading] = useState(false);
 
   useEffect(() => {
     if (status === 'unauthenticated' || (session?.user && (session.user as any).role !== 'ADMIN')) {
@@ -96,8 +100,43 @@ export default function AdminPage() {
       fetchUsers();
       fetchSmtpConfig();
       fetchFaqs();
+      fetchNoticeSetting();
     }
   }, [status, session, router]);
+
+  const fetchNoticeSetting = async () => {
+    try {
+      const res = await fetch('/api/settings?key=NOTICE_TEXT');
+      if (res.ok) {
+        const data = await res.json();
+        setNoticeText(data.value || '');
+      }
+    } catch (error) {
+      console.error('Error fetching notice:', error);
+    }
+  };
+
+  const handleSaveNotice = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setNoticeLoading(true);
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'NOTICE_TEXT', value: noticeText }),
+      });
+      if (res.ok) {
+        alert('Notice updated successfully!');
+      } else {
+        alert('Failed to update notice.');
+      }
+    } catch (error) {
+      console.error('Error saving notice:', error);
+      alert('Error saving notice.');
+    } finally {
+      setNoticeLoading(false);
+    }
+  };
 
   const fetchFaqs = async () => {
     setFaqLoading(true);
@@ -335,6 +374,13 @@ export default function AdminPage() {
             <HelpCircle className="w-4 h-4" />
             FAQ Manager
           </button>
+          <button
+            onClick={() => setActiveTab('system')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'system' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'}`}
+          >
+            <Settings className="w-4 h-4" />
+            System
+          </button>
         </div>
 
         {activeTab === 'users' && (
@@ -562,6 +608,44 @@ export default function AdminPage() {
                 <p className="text-sm font-medium">{smtpMessage.text}</p>
               </div>
             )}
+          </div>
+        </div>
+      ) : activeTab === 'system' ? (
+        <div className="max-w-2xl">
+          <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">
+                <Send className="w-6 h-6" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">Notice Bar Management</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Update the red scrolling text visible across the site.</p>
+              </div>
+            </div>
+
+            <form onSubmit={handleSaveNotice} className="space-y-4">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Scrolling Text</label>
+                <textarea
+                  value={noticeText}
+                  onChange={(e) => setNoticeText(e.target.value)}
+                  placeholder="Enter notice text here (e.g. New Mock Exams available! Enroll today...)"
+                  rows={4}
+                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-red-500 outline-none dark:text-white resize-none"
+                />
+                <p className="text-[10px] text-gray-400 mt-2 px-1 italic">
+                  Note: The notice bar will be hidden if this field is left empty.
+                </p>
+              </div>
+
+              <button
+                type="submit"
+                disabled={noticeLoading}
+                className="w-full py-3 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-bold rounded-xl transition-all shadow-lg shadow-red-500/20 flex items-center justify-center gap-2"
+              >
+                {noticeLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Update Notice'}
+              </button>
+            </form>
           </div>
         </div>
       ) : (

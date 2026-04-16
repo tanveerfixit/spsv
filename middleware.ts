@@ -34,6 +34,7 @@ export default withAuth(
           pathname.startsWith("/study") ||
           pathname.startsWith("/official-manual") ||
           pathname.startsWith("/api/auth") ||
+          pathname.startsWith("/api/settings") ||
           pathname.startsWith("/_next") ||
           pathname.includes("favicon.ico")
         ) {

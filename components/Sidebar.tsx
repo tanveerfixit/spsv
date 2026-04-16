@@ -17,7 +17,7 @@ const SPSV_DATA = [
         subCategories: ['Welcome']
       },
       {
-        title: 'Chapter 1: The SPSV industry',
+        title: 'Chapter 1: The SPSV Industry',
         subCategories: [
           '1.1 About the NTA',
           '1.2 The importance of the SPSV industry',
@@ -28,7 +28,7 @@ const SPSV_DATA = [
         ]
       },
       {
-        title: 'Chapter 2: SPSV driver licensing',
+        title: 'Chapter 2: SPSV Driver Licensing',
         subCategories: [
           '2.1 Introduction to the SPSV driver licence',
           '2.2 Requirements to get an SPSV driver licence',
@@ -38,7 +38,7 @@ const SPSV_DATA = [
         ]
       },
       {
-        title: 'Chapter 3: Choosing a vehicle',
+        title: 'Chapter 3: Choosing a Vehicle',
         subCategories: [
           '3.1 Vehicle standards for SPSVs',
           '3.2 Roadworthiness',
@@ -158,7 +158,7 @@ const SPSV_DATA = [
     categories: [
       {
         title: 'Practice Tests',
-        subCategories: ['Terminology Test', 'Chapter 1 Test', 'Industry Knowledge Test', 'Area Knowledge Test', 'Full Mock Exam']
+        subCategories: ['Terminology Test', 'Chapter 1 Test', 'Chapter 2 Test', 'Chapter 3 Test', 'Industry Knowledge Test', 'Area Knowledge Test', 'Full Mock Exam']
       }
     ]
   }

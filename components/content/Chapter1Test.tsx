@@ -131,32 +131,32 @@ export default function Chapter1Test() {
   return (
     <div className="max-w-3xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
-        <div className="flex items-center gap-3">
-          <h2 className="text-lg md:text-2xl font-semibold text-gray-900 dark:text-white">Chapter 1 Practice Test</h2>
-          <span className="text-xs font-medium text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/30 px-2.5 py-0.5 rounded-full whitespace-nowrap">
+        <div className="flex items-center gap-2">
+          <h2 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">Chapter 1 Test</h2>
+          <span className="text-[10px] font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-md whitespace-nowrap">
             {currentQuestionIndex + 1} / {questions.length}
           </span>
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 md:p-6 rounded-lg mb-4 shadow-sm">
-        <h3 className="text-base md:text-xl font-bold text-gray-900 dark:text-white mb-4 leading-snug">
+      <div className="bg-white dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 p-5 rounded-xl mb-4">
+        <h3 className="text-base font-bold text-gray-900 dark:text-white mb-5 leading-tight">
           {currentQ.question}
         </h3>
 
-        <div className="space-y-2.5">
+        <div className="space-y-2">
           {currentQ.options.map((option, index) => {
-            let buttonClass = "w-full text-left py-3 px-4 border rounded-lg transition-colors text-sm md:text-base ";
+            let buttonClass = "w-full text-left py-2.5 px-4 border rounded-xl transition-all duration-200 text-sm ";
             
             if (!selectedAnswer) {
-              buttonClass += "border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300";
+              buttonClass += "border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 hover:border-blue-200 dark:hover:border-blue-900";
             } else {
               if (option === currentQ.correctAnswer) {
-                buttonClass += "border-green-500 bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300 font-medium";
+                buttonClass += "border-green-500 bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300 font-bold";
               } else if (option === selectedAnswer) {
                 buttonClass += "border-red-500 bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300";
               } else {
-                buttonClass += "border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-600 opacity-50";
+                buttonClass += "border-gray-100 dark:border-gray-800 text-gray-400 dark:text-gray-600 opacity-50";
               }
             }
 
