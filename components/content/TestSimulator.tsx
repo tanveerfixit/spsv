@@ -402,8 +402,8 @@ export default function TestSimulator({ questions: initialQuestions, category, p
             {isLocked && (
               <div className="mt-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <div className="bg-[#003057] text-white p-6 rounded-sm mb-6 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 p-2 md:p-4 opacity-10 pointer-events-none">
-                    <Info className="w-10 h-10 md:w-16 md:h-16" />
+                  <div className="absolute top-2 right-2 opacity-10 pointer-events-none">
+                    <Info className="w-6 h-6 md:w-12 md:h-12" />
                   </div>
                   <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#99cc33] mb-2">Technical Guidance</h4>
                   <p className="text-sm font-medium leading-relaxed max-w-xl">
