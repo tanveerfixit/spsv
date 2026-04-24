@@ -68,10 +68,10 @@ export default function Home() {
           <Link 
             key={card.title}
             href={card.href}
-            className="group relative flex flex-col p-4 sm:p-8 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl sm:rounded-3xl shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+            className="group relative flex flex-col p-4 sm:p-8 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl sm:rounded-3xl shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-200 overflow-hidden"
           >
             {/* Background Decoration */}
-            <div className={`absolute -right-8 -top-8 w-32 h-32 bg-${card.color}-500/5 rounded-full group-hover:scale-150 transition-transform duration-500`} />
+            <div className={`absolute -right-8 -top-8 w-32 h-32 bg-${card.color}-500/5 rounded-full group-hover:scale-150 transition-transform duration-300`} />
             
             <div className="flex items-start justify-between mb-3 sm:mb-6">
               <div className={`p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-${card.color}-50 dark:bg-${card.color}-900/30 text-${card.color}-600 dark:text-${card.color}-400 group-hover:rotate-6 transition-transform`}>
@@ -87,7 +87,7 @@ export default function Home() {
               {card.description}
             </p>
 
-            <div className={`mt-4 sm:mt-8 w-10 sm:w-12 h-1 bg-${card.color}-500 rounded-full group-hover:w-full transition-all duration-500`} />
+            <div className={`mt-4 sm:mt-8 w-10 sm:w-12 h-1 bg-${card.color}-500 rounded-full group-hover:w-full transition-all duration-300`} />
           </Link>
         ))}
       </div>

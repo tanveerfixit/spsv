@@ -36,6 +36,20 @@ const TESTS = [
     available: true
   },
   {
+    title: 'Chapter 4 Test',
+    description: 'Assess your knowledge on SPSV vehicle licensing, inspections, and regulations.',
+    questions: 50,
+    time: '50 mins',
+    available: true
+  },
+  {
+    title: 'Chapter 5 Test',
+    description: 'Test your understanding of working as an SPSV operator, including plying for hire and compliance.',
+    questions: 50,
+    time: '50 mins',
+    available: true
+  },
+  {
     title: 'Industry Knowledge Test',
     description: 'Comprehensive test covering all chapters of the Official Manual.',
     questions: 54,

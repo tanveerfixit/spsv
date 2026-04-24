@@ -5,6 +5,8 @@ import Chapter1 from '@/components/content/Chapter1';
 import Chapter1Test from '@/components/content/Chapter1Test';
 import Chapter2Test from '@/components/content/Chapter2Test';
 import Chapter3Test from '@/components/content/Chapter3Test';
+import Chapter4Test from '@/components/content/Chapter4Test';
+import Chapter5Test from '@/components/content/Chapter5Test';
 
 export default async function ContentPage({ params }: { params: Promise<{ slug: string[] }> }) {
   const resolvedParams = await params;
@@ -28,6 +30,14 @@ export default async function ContentPage({ params }: { params: Promise<{ slug: 
 
   if (slugPath === 'assessment/practice-tests/chapter-3-test') {
     return <Chapter3Test />;
+  }
+
+  if (slugPath === 'assessment/practice-tests/chapter-4-test') {
+    return <Chapter4Test />;
+  }
+
+  if (slugPath === 'assessment/practice-tests/chapter-5-test') {
+    return <Chapter5Test />;
   }
 
   if (slugPath.startsWith('official-manual/chapter-1-the-spsv-industry/')) {

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { Clock, CheckCircle, Target, TrendingUp, AlertCircle, Loader2 } from 'lucide-react';
+import { Clock, CheckCircle, Target, TrendingUp, AlertCircle, Loader2, BarChart3 } from 'lucide-react';
 
 interface TestResult {
   id: string;
@@ -44,27 +44,23 @@ export default function DashboardPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
-        <Loader2 className="w-10 h-10 animate-spin text-blue-500" />
-        <p className="text-gray-600 dark:text-gray-400">Loading your progress...</p>
+      <div className="flex flex-col items-center justify-center min-h-[50vh] gap-3">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <p className="text-sm text-gray-500 dark:text-gray-400">Loading your progress...</p>
       </div>
     );
   }
 
   if (status === 'unauthenticated') {
     return (
-      <div className="max-w-3xl mx-auto text-center py-20">
-        <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Track Your Progress</h2>
-        <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-lg mx-auto">
-          Sign in to your account to save your test scores, view statistics, and identify areas for improvement.
+      <div className="-m-3 md:-m-6 lg:-m-10 flex flex-col items-center justify-center min-h-[60vh] bg-gray-50 dark:bg-gray-950">
+        <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">Track Your Progress</h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 max-w-md text-center">
+          Sign in to save your test scores, view statistics, and identify areas for improvement.
         </p>
-        <div className="flex items-center justify-center gap-4">
-          <Link href="/login" className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-500/20">
-            Sign In
-          </Link>
-          <Link href="/signup" className="px-8 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
-            Create Account
-          </Link>
+        <div className="flex items-center gap-3">
+          <Link href="/login" className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold transition-colors">Sign In</Link>
+          <Link href="/signup" className="px-6 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Create Account</Link>
         </div>
       </div>
     );
@@ -99,126 +95,132 @@ export default function DashboardPage() {
       category,
       percentage: Math.round((stats.totalCorrect / stats.totalQuestions) * 100)
     }))
-    .filter(c => c.percentage < 80) // Consider anything under 80% a weak area
+    .filter(c => c.percentage < 80)
     .sort((a, b) => a.percentage - b.percentage);
 
   return (
-    <div className="max-w-5xl mx-auto">
-      <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900 dark:text-white">My Progress Dashboard</h2>
-
-      {/* Top Stats Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col">
-          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 mb-2">
-            <CheckCircle className="w-4 h-4" />
-            <span className="text-sm font-medium">Tests Taken</span>
+    <div className="-m-3 md:-m-6 lg:-m-10">
+      {/* Top Bar */}
+      <div className="bg-gray-900 dark:bg-black text-white">
+        <div className="flex items-center justify-between px-4 md:px-6 h-12">
+          <div className="flex items-center gap-3">
+            <BarChart3 className="w-5 h-5 text-blue-400" />
+            <h1 className="text-sm font-bold tracking-wide">My Progress Dashboard</h1>
           </div>
-          <span className="text-2xl font-bold text-gray-900 dark:text-white">{totalTests}</span>
-        </div>
-        
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col">
-          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 mb-2">
-            <Target className="w-4 h-4" />
-            <span className="text-sm font-medium">Average Score</span>
-          </div>
-          <span className="text-2xl font-bold text-gray-900 dark:text-white">{averageScore}%</span>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col">
-          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 mb-2">
-            <TrendingUp className="w-4 h-4" />
-            <span className="text-sm font-medium">Questions Answered</span>
-          </div>
-          <span className="text-2xl font-bold text-gray-900 dark:text-white">{totalQuestions}</span>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col">
-          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 mb-2">
-            <Clock className="w-4 h-4" />
-            <span className="text-sm font-medium">Time Spent</span>
-          </div>
-          <span className="text-2xl font-bold text-gray-900 dark:text-white">{formatTime(totalTimeSeconds)}</span>
+          <span className="text-xs text-gray-500">{totalTests} tests completed</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Left Column: Recent Tests */}
-        <div className="md:col-span-2">
-          <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Recent Tests</h3>
+      {/* Stats Row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 border-b border-gray-200 dark:border-gray-800">
+        <div className="p-4 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+          <div className="flex items-center gap-1.5 mb-1">
+            <CheckCircle className="w-3.5 h-3.5 text-blue-600" />
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Tests Taken</span>
+          </div>
+          <span className="text-xl font-black text-gray-900 dark:text-white">{totalTests}</span>
+        </div>
+        <div className="p-4 md:border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+          <div className="flex items-center gap-1.5 mb-1">
+            <Target className="w-3.5 h-3.5 text-green-600" />
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Avg Score</span>
+          </div>
+          <span className="text-xl font-black text-gray-900 dark:text-white">{averageScore}%</span>
+        </div>
+        <div className="p-4 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 border-t md:border-t-0">
+          <div className="flex items-center gap-1.5 mb-1">
+            <TrendingUp className="w-3.5 h-3.5 text-purple-600" />
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Questions</span>
+          </div>
+          <span className="text-xl font-black text-gray-900 dark:text-white">{totalQuestions}</span>
+        </div>
+        <div className="p-4 bg-white dark:bg-gray-900 border-t md:border-t-0">
+          <div className="flex items-center gap-1.5 mb-1">
+            <Clock className="w-3.5 h-3.5 text-orange-600" />
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Time Spent</span>
+          </div>
+          <span className="text-xl font-black text-gray-900 dark:text-white">{formatTime(totalTimeSeconds)}</span>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-3">
+        {/* Recent Tests — Full Width Table */}
+        <div className="lg:col-span-2 lg:border-r border-gray-200 dark:border-gray-800">
+          <div className="px-4 md:px-6 py-3 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-800">
+            <h3 className="text-[11px] font-black text-gray-400 uppercase tracking-[0.15em]">Recent Tests</h3>
+          </div>
+
           {results.length === 0 ? (
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 text-center text-gray-500 dark:text-gray-400">
-              You haven&apos;t taken any tests yet. Head over to the Assessment section to get started!
+            <div className="py-16 text-center bg-white dark:bg-gray-900">
+              <p className="text-sm text-gray-500 dark:text-gray-400">No tests taken yet. Head to the Assessment section to get started!</p>
             </div>
           ) : (
-            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
-                      <th className="p-4 text-sm font-semibold text-gray-600 dark:text-gray-300">Date</th>
-                      <th className="p-4 text-sm font-semibold text-gray-600 dark:text-gray-300">Category</th>
-                      <th className="p-4 text-sm font-semibold text-gray-600 dark:text-gray-300">Score</th>
-                      <th className="p-4 text-sm font-semibold text-gray-600 dark:text-gray-300">Time</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {results.slice(0, 10).map((result) => {
-                      const percentage = Math.round((result.score / result.totalQuestions) * 100);
-                      const date = new Date(result.completedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
-                      return (
-                        <tr key={result.id} className="border-b border-gray-100 dark:border-gray-800 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                          <td className="p-4 text-sm text-gray-600 dark:text-gray-400">{date}</td>
-                          <td className="p-4 text-sm font-medium text-gray-900 dark:text-white">{result.category}</td>
-                          <td className="p-4">
-                            <div className="flex items-center gap-2">
-                              <span className={`text-sm font-bold ${percentage >= 80 ? 'text-green-600 dark:text-green-400' : percentage >= 60 ? 'text-yellow-600 dark:text-yellow-400' : 'text-red-600 dark:text-red-400'}`}>
-                                {percentage}%
-                              </span>
-                              <span className="text-xs text-gray-500 dark:text-gray-500">({result.score}/{result.totalQuestions})</span>
-                            </div>
-                          </td>
-                          <td className="p-4 text-sm text-gray-600 dark:text-gray-400">
-                            {result.timeSpentSeconds ? `${Math.floor(result.timeSpentSeconds / 60)}m ${result.timeSpentSeconds % 60}s` : '-'}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+                    <th className="px-4 md:px-6 py-2.5 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date</th>
+                    <th className="px-4 md:px-6 py-2.5 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Category</th>
+                    <th className="px-4 md:px-6 py-2.5 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Score</th>
+                    <th className="px-4 md:px-6 py-2.5 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider hidden sm:table-cell">Time</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                  {results.slice(0, 15).map((result) => {
+                    const percentage = Math.round((result.score / result.totalQuestions) * 100);
+                    const date = new Date(result.completedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+                    return (
+                      <tr key={result.id} className="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors">
+                        <td className="px-4 md:px-6 py-2.5 text-xs text-gray-500 dark:text-gray-400">{date}</td>
+                        <td className="px-4 md:px-6 py-2.5 text-xs font-bold text-gray-900 dark:text-white">{result.category}</td>
+                        <td className="px-4 md:px-6 py-2.5">
+                          <div className="flex items-center gap-2">
+                            <span className={`text-xs font-black ${percentage >= 80 ? 'text-green-600' : percentage >= 60 ? 'text-yellow-600' : 'text-red-600'}`}>
+                              {percentage}%
+                            </span>
+                            <span className="text-[10px] text-gray-400">({result.score}/{result.totalQuestions})</span>
+                          </div>
+                        </td>
+                        <td className="px-4 md:px-6 py-2.5 text-xs text-gray-500 dark:text-gray-400 hidden sm:table-cell">
+                          {result.timeSpentSeconds ? `${Math.floor(result.timeSpentSeconds / 60)}m ${result.timeSpentSeconds % 60}s` : '-'}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           )}
         </div>
 
-        {/* Right Column: Areas for Improvement */}
-        <div>
-          <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Needs Practice</h3>
-          <div className="bg-white dark:bg-gray-800 p-5 rounded-xl border border-gray-200 dark:border-gray-700">
+        {/* Needs Practice — Right Panel */}
+        <div className="bg-white dark:bg-gray-900 border-t lg:border-t-0 border-gray-200 dark:border-gray-800">
+          <div className="px-4 md:px-6 py-3 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-800">
+            <h3 className="text-[11px] font-black text-gray-400 uppercase tracking-[0.15em]">Needs Practice</h3>
+          </div>
+
+          <div className="p-4 md:p-6">
             {weakCategories.length === 0 ? (
-              <div className="text-center py-4">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 mb-3">
-                  <CheckCircle className="w-6 h-6" />
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {totalTests > 0 ? "Great job! You're scoring above 80% in all categories." : "Take some tests to see your weak areas here."}
+              <div className="text-center py-6">
+                <CheckCircle className="w-8 h-8 text-green-500 mx-auto mb-2" />
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {totalTests > 0 ? "All categories above 80%. Keep it up!" : "Take tests to see weak areas here."}
                 </p>
               </div>
             ) : (
               <div className="space-y-4">
                 {weakCategories.map((weak) => (
-                  <div key={weak.category} className="flex items-start gap-3">
-                    <AlertCircle className="w-5 h-5 text-red-500 dark:text-red-400 shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-900 dark:text-white">{weak.category}</h4>
-                      <div className="flex items-center gap-2 mt-1">
-                        <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-red-500 dark:bg-red-400 rounded-full" 
-                            style={{ width: `${weak.percentage}%` }}
-                          />
-                        </div>
-                        <span className="text-xs font-bold text-gray-700 dark:text-gray-300 w-8">{weak.percentage}%</span>
+                  <div key={weak.category}>
+                    <div className="flex items-center justify-between mb-1">
+                      <div className="flex items-center gap-2">
+                        <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />
+                        <span className="text-xs font-bold text-gray-900 dark:text-white">{weak.category}</span>
                       </div>
+                      <span className="text-[10px] font-bold text-red-600">{weak.percentage}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 h-1.5 overflow-hidden">
+                      <div className="h-full bg-red-500 transition-all duration-700" style={{ width: `${weak.percentage}%` }} />
                     </div>
                   </div>
                 ))}
