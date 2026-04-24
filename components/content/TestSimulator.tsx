@@ -402,10 +402,12 @@ export default function TestSimulator({ questions: initialQuestions, category, p
             {isLocked && (
               <div className="mt-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <div className="bg-[#003057] text-white p-6 rounded-sm mb-6 relative overflow-hidden">
-                  <div className="absolute top-2 right-2 opacity-10 pointer-events-none">
-                    <Info className="w-6 h-6 md:w-12 md:h-12" />
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="bg-[#99cc33] p-1.5 rounded-sm shadow-sm">
+                      <Info className="w-4 h-4 text-[#003057]" />
+                    </div>
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#99cc33]">Technical Guidance</h4>
                   </div>
-                  <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#99cc33] mb-2">Technical Guidance</h4>
                   <p className="text-sm font-medium leading-relaxed max-w-xl">
                     {currentQ.guidance || currentQ.explanation || "Correct response recorded. Ensure you review the industry handbook for more details on this topic."}
                   </p>
