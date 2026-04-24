@@ -234,32 +234,36 @@ export default function TestSimulator({ questions: initialQuestions, category, p
 
   return (
     <div className="max-w-4xl mx-auto w-full bg-white shadow-2xl overflow-hidden border-2 border-[#003057] rounded-sm transition-all duration-300">
-      
-      {/* TOP STATUS BAR (Prometric Style) */}
-      <div className="bg-[#003057] p-4 text-white flex items-center justify-between border-b-4 border-[#99cc33]">
-        <div className="flex items-center gap-4">
-          <div className="bg-white p-1 rounded-sm">
-            <ShieldCheck className="w-5 h-5 text-[#003057]" />
+      {/* TOP STATUS BAR (Prometric Style) - Hidden during quiz to save space */}
+      {currentStep === 'welcome' && (
+        <div className="bg-[#003057] border-b-2 border-white/10 px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="bg-[#99cc33] text-[#003057] px-3 py-1 text-[10px] font-black uppercase tracking-widest">
+              SPSV Knowledge Hub
+            </div>
+            <h1 className="text-white text-xs font-black uppercase tracking-[0.2em] opacity-40">
+              INDUSTRY STUDY & PRACTICE
+            </h1>
           </div>
-          <div>
-            <h1 className="text-sm font-black uppercase tracking-tight">SPSV Knowledge Hub</h1>
-            <p className="text-[10px] text-[#99cc33] font-bold">INDUSTRY STUDY & PRACTICE</p>
+
+          <div className="flex items-center gap-8">
+            <div className="hidden sm:block">
+              <p className="text-[10px] font-black text-[#99cc33] uppercase tracking-widest opacity-60">Session ID</p>
+              <p className="text-white text-[11px] font-bold">SKILL-STUDY-01</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="text-right">
+                <p className="text-[10px] font-black text-[#99cc33] uppercase tracking-widest opacity-60">Status</p>
+                <p className="text-white text-[11px] font-bold uppercase">{currentStep}</p>
+              </div>
+              <div className="w-2 h-2 rounded-full bg-[#99cc33] animate-pulse shadow-[0_0_10px_#99cc33]" />
+            </div>
           </div>
         </div>
-        <div className="flex items-center gap-6 text-[11px] font-mono">
-           <div className="hidden md:block">
-             <span className="opacity-60 block uppercase">Session ID</span>
-             <span className="font-bold">SKILL-STUDY-01</span>
-           </div>
-           <div className="text-right">
-             <span className="opacity-60 block uppercase">Status</span>
-             <span className="font-bold text-[#99cc33] uppercase">{currentStep}</span>
-           </div>
-        </div>
-      </div>
+      )}
 
       {/* Content Area */}
-      <div className="p-6 md:p-10 min-h-[500px] relative">
+      <div className="p-4 md:p-10 min-h-[400px] md:min-h-[500px] relative">
         {/* Resume Modal */}
         {hasStoredProgress && (
           <div className="absolute inset-0 z-50 flex items-center justify-center p-6 md:p-10 bg-white/95 backdrop-blur-sm animate-in fade-in duration-300">
@@ -294,9 +298,9 @@ export default function TestSimulator({ questions: initialQuestions, category, p
           </div>
         )}
         {currentStep === 'welcome' && (
-          <div className="max-w-2xl mx-auto space-y-8 py-6">
+          <div className="max-w-2xl mx-auto space-y-4 md:space-y-8 py-2 md:py-6">
             <div className="border-l-8 border-[#99cc33] pl-6 py-2">
-              <h2 className="text-4xl font-black text-[#003057] leading-tight italic uppercase">
+              <h2 className="text-2xl md:text-4xl font-black text-[#003057] leading-tight italic uppercase">
                 ENHANCE YOUR <br/> INDUSTRY KNOWLEDGE
               </h2>
               <p className="text-slate-500 mt-2 font-medium">{category} Study Session</p>
@@ -318,7 +322,7 @@ export default function TestSimulator({ questions: initialQuestions, category, p
 
             <button 
               onClick={handleStart}
-              className="w-full py-6 bg-[#99cc33] hover:bg-[#86b32d] text-[#003057] font-black uppercase tracking-[0.2em] rounded-sm transition-all shadow-md active:scale-[0.98] border-b-4 border-[#76a125]"
+              className="w-full py-4 md:py-6 bg-[#99cc33] hover:bg-[#86b32d] text-[#003057] font-black uppercase tracking-[0.2em] rounded-sm transition-all shadow-md active:scale-[0.98] border-b-4 border-[#76a125]"
             >
               Start Practice Session
             </button>
@@ -331,9 +335,9 @@ export default function TestSimulator({ questions: initialQuestions, category, p
               <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-[#003057]"></div>
             </div>
           ) : (
-          <div className="space-y-8">
+          <div className="space-y-4 md:space-y-8">
             {/* Question Header */}
-            <div className="flex items-center justify-between border-b-2 border-slate-100 pb-4">
+            <div className="flex items-center justify-between border-b-2 border-slate-100 pb-2 md:pb-4">
               <div className="flex items-center gap-3">
                 <div className="bg-[#003057] text-white p-2 rounded-sm">
                   {getIcon(currentQ)}
@@ -346,14 +350,14 @@ export default function TestSimulator({ questions: initialQuestions, category, p
             </div>
 
             {/* Question Body */}
-            <div className="py-2">
-              <h3 className="text-2xl font-bold text-[#003057] leading-tight">
+            <div className="py-1 md:py-2">
+              <h3 className="text-lg md:text-2xl font-bold text-[#003057] leading-tight">
                 {currentQ.question}
               </h3>
             </div>
 
             {/* Options A, B, C, D */}
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 gap-2 md:gap-4">
               {currentQ.options.map((option, idx) => {
                 const letter = String.fromCharCode(65 + idx);
                 const isCorrect = typeof currentQ.correct === 'number' 
@@ -362,7 +366,7 @@ export default function TestSimulator({ questions: initialQuestions, category, p
                 const isSelected = selectedOption === idx;
                 
                 let containerClass = "w-full text-left flex items-stretch border-2 rounded-sm transition-all group overflow-hidden ";
-                let letterBoxClass = "w-14 flex items-center justify-center font-black text-xl border-r-2 ";
+                let letterBoxClass = "w-10 md:w-14 flex items-center justify-center font-black text-base md:text-xl border-r-2 ";
 
                 if (!isLocked) {
                   containerClass += "border-slate-200 bg-white hover:border-[#003057]";
@@ -390,7 +394,7 @@ export default function TestSimulator({ questions: initialQuestions, category, p
                     <div className={letterBoxClass}>
                       {letter}
                     </div>
-                    <div className="flex-1 p-5 font-bold text-lg">
+                    <div className="flex-1 p-3 md:p-5 font-bold text-sm md:text-lg">
                       {option}
                     </div>
                   </button>
@@ -400,15 +404,15 @@ export default function TestSimulator({ questions: initialQuestions, category, p
 
             {/* Technical Guidance Feedback */}
             {isLocked && (
-              <div className="mt-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                <div className="bg-[#003057] text-white p-6 rounded-sm mb-6 relative overflow-hidden">
+              <div className="mt-4 md:mt-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                <div className="bg-[#003057] text-white p-4 md:p-6 rounded-sm mb-4 md:mb-6 relative overflow-hidden">
                   <div className="flex items-center gap-3 mb-3">
                     <div className="bg-[#99cc33] p-1.5 rounded-sm shadow-sm">
                       <Info className="w-4 h-4 text-[#003057]" />
                     </div>
                     <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#99cc33]">Technical Guidance</h4>
                   </div>
-                  <p className="text-sm font-medium leading-relaxed max-w-xl">
+                  <p className="text-xs md:text-sm font-medium leading-relaxed max-w-xl">
                     {currentQ.guidance || currentQ.explanation || "Correct response recorded. Ensure you review the industry handbook for more details on this topic."}
                   </p>
                 </div>
@@ -416,7 +420,7 @@ export default function TestSimulator({ questions: initialQuestions, category, p
                 <div className="flex justify-end">
                   <button 
                     onClick={handleNext}
-                    className="px-10 py-5 bg-[#003057] hover:bg-black text-white font-black uppercase tracking-widest rounded-sm flex items-center gap-4 transition-all"
+                    className="w-full md:w-auto px-6 md:px-10 py-4 md:py-5 bg-[#003057] hover:bg-black text-white font-black uppercase tracking-wider md:tracking-widest rounded-sm flex items-center justify-center gap-4 transition-all"
                   >
                     {currentIndex === questions.length - 1 ? 'Complete Session' : 'Confirm & Next'}
                     <ChevronRight className="w-5 h-5" />
