@@ -358,8 +358,6 @@ export default function AdminPage() {
             <h1 className="text-sm font-bold tracking-wide">Admin Control Center</h1>
           </div>
           <div className="flex items-center gap-2 text-xs text-gray-400">
-            <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-            <span className="hidden sm:inline">System Online</span>
           </div>
         </div>
 

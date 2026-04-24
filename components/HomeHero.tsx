@@ -8,10 +8,6 @@ export default function HomeHero() {
 
   return (
     <div className="text-left md:text-center mb-6 md:mb-16 transition-all duration-200">
-      <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800 animate-pulse">
-        <span className="flex h-2 w-2 rounded-full bg-blue-600"></span>
-        <span className="text-[11px] font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider">Now Updated: Chapter 4 & 5 Tests</span>
-      </div>
       <h2 className="text-3xl md:text-5xl font-extrabold mb-3 md:mb-6 text-gray-900 dark:text-white tracking-tight">
         Master Your <span className="text-blue-600">SPSV Test</span>
       </h2>

@@ -35,7 +35,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <Header onMenuClick={() => {}} />
 
       <main className="flex-1 flex flex-col min-w-0">
-        <div className={`flex-1 ${pathname === '/faq' ? 'p-0' : 'p-3 md:p-6 lg:p-10'} max-w-7xl mx-auto w-full`}>
+        <div className={`flex-1 ${pathname === '/faq' ? 'p-0' : 'p-0 md:p-6 lg:p-10'} max-w-7xl mx-auto w-full`}>
           {children}
         </div>
       </main>

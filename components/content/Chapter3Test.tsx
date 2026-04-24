@@ -129,7 +129,7 @@ export default function Chapter3Test() {
   const currentQ = questions[currentQuestionIndex];
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-3xl mx-auto px-4 sm:px-0 pt-4 sm:pt-0">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
         <div className="flex items-center gap-2">
           <h2 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">Chapter 3 Test</h2>
@@ -139,14 +139,14 @@ export default function Chapter3Test() {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 p-5 rounded-xl mb-4">
-        <h3 className="text-base font-bold text-gray-900 dark:text-white mb-5 leading-tight">
+      <div className="bg-white dark:bg-gray-800/50 border-y sm:border border-gray-100 dark:border-gray-800 p-4 sm:p-5 rounded-none sm:rounded-xl mb-2 -mx-4 sm:mx-0">
+        <h3 className="text-base font-bold text-gray-900 dark:text-white mb-4 leading-tight">
           {currentQ.question}
         </h3>
 
         <div className="space-y-2">
           {currentQ.options.map((option, index) => {
-            let buttonClass = "w-full text-left py-2.5 px-4 border rounded-xl transition-all duration-200 text-sm ";
+            let buttonClass = "w-full text-left py-2 px-4 border rounded-xl transition-all duration-200 text-sm ";
             
             if (!selectedAnswer) {
               buttonClass += "border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 hover:border-blue-200 dark:hover:border-blue-900";

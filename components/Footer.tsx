@@ -16,40 +16,24 @@ export default function Footer() {
 
   return (
     <footer className="w-full bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 transition-colors duration-200">
-      <div className="mx-auto max-w-7xl px-4 py-8 md:py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div className="flex flex-col gap-2">
-            <h2 className="font-bold text-lg text-gray-900 dark:text-white tracking-tight">SPSV <span className="text-blue-600">PRO</span></h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 max-w-md">
-              The professional study platform for Irish SPSV Driver Entry Test preparation. 
-              Comprehensive guides, accurate mock exams, and progress monitoring.
-            </p>
-          </div>
-          
-          <div className="flex flex-wrap gap-x-8 gap-y-4 md:justify-end">
+      <div className="mx-auto max-w-7xl px-4 py-6 md:py-10">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-x-8 gap-y-3 w-full md:w-auto">
             {footerLinks.map((link) => (
               <Link 
                 key={link.name} 
                 href={link.href}
-                className="flex items-center gap-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                className="flex items-center justify-center md:justify-start gap-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
               >
                 {link.icon}
                 {link.name}
               </Link>
             ))}
           </div>
-        </div>
-
-        <div className="mt-8 pt-8 border-t border-gray-100 dark:border-gray-900 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-gray-500 dark:text-gray-500">
-            &copy; {currentYear} SPSV Study & Test. All rights reserved. Not affiliated with the NTA.
+          
+          <p className="text-xs text-gray-500 dark:text-gray-500 text-center md:text-right w-full md:w-auto">
+            &copy; {currentYear} SPSV Study & Test. All rights reserved.
           </p>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">System Online</span>
-            </div>
-          </div>
         </div>
       </div>
     </footer>
