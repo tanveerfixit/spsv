@@ -49,7 +49,7 @@ export default function Introduction() {
               
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2 block">Official Definition</span>
+                  <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2 block">Handbook Definition</span>
                   <div className="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-xl border-l-4 border-gray-300 dark:border-gray-600 italic text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
                     &quot;{item.bookText}&quot;
                   </div>

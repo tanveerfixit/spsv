@@ -15,7 +15,7 @@ export default function Terminology() {
             <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">{item.term}</h3>
             
             <div className="mb-4">
-              <span className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 block">Official Definition</span>
+              <span className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 block">Handbook Definition</span>
               <p className="text-gray-800 dark:text-gray-200 leading-relaxed border-l-2 border-gray-300 dark:border-gray-600 pl-3 text-sm md:text-base">
                 {item.bookText}
               </p>

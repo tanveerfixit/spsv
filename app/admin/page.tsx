@@ -335,8 +335,9 @@ export default function AdminPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-3">
+        <Loader2 className="w-8 h-8 animate-spin text-[#003057]" />
+        <p className="text-xs font-black text-[#003057] uppercase tracking-widest">Initializing Control Center...</p>
       </div>
     );
   }
@@ -349,30 +350,31 @@ export default function AdminPage() {
   ];
 
   return (
-    <div className="-m-3 md:-m-6 lg:-m-10">
-      {/* Top Bar */}
-      <div className="bg-gray-900 dark:bg-black text-white">
-        <div className="flex items-center justify-between px-4 md:px-6 h-12">
-          <div className="flex items-center gap-3">
-            <Shield className="w-5 h-5 text-blue-400" />
-            <h1 className="text-sm font-bold tracking-wide">Admin Control Center</h1>
+    <div className="-m-3 md:-m-6 lg:-m-10 min-h-screen bg-[#F2F5F7]">
+      {/* Top Bar (Prometric Style) */}
+      <div className="bg-[#003057] border-b-4 border-[#99cc33] shrink-0 shadow-xl">
+        <div className="flex items-center justify-between px-6 h-14 max-w-7xl mx-auto w-full">
+          <div className="flex items-center gap-3 text-white">
+            <Shield className="w-5 h-5 text-[#99cc33]" />
+            <h1 className="text-sm font-black uppercase tracking-tight">Admin Control Center</h1>
           </div>
-          <div className="flex items-center gap-2 text-xs text-gray-400">
+          <div className="text-[10px] font-black text-white/40 uppercase tracking-widest">
+            {users.length} TOTAL USERS RECORDED
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-t border-gray-800">
+        <div className="flex bg-black/10">
           {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 md:px-6 py-2.5 text-xs font-semibold uppercase tracking-wider transition-colors border-b-2 ${activeTab === tab.id ? 'border-blue-500 text-white bg-gray-800/50' : 'border-transparent text-gray-500 hover:text-gray-300 hover:bg-gray-800/30'}`}
+              className={`flex items-center gap-3 px-6 py-4 text-xs font-black uppercase tracking-[0.2em] transition-all border-b-4 ${activeTab === tab.id ? 'border-[#99cc33] text-white bg-white/5' : 'border-transparent text-white/40 hover:text-white hover:bg-white/5'}`}
             >
-              <tab.icon className="w-3.5 h-3.5" />
+              <tab.icon className={`w-4 h-4 ${activeTab === tab.id ? 'text-[#99cc33]' : ''}`} />
               <span className="hidden sm:inline">{tab.label}</span>
               {tab.count !== undefined && (
-                <span className={`text-[10px] px-1.5 py-0.5 font-bold ${activeTab === tab.id ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-400'}`}>{tab.count}</span>
+                <span className={`text-[10px] px-2 py-0.5 rounded-sm ${activeTab === tab.id ? 'bg-[#99cc33] text-[#003057]' : 'bg-white/10 text-white/40'}`}>{tab.count}</span>
               )}
             </button>
           ))}
@@ -383,60 +385,62 @@ export default function AdminPage() {
       {activeTab === 'users' && (
         <div>
           {/* Search Bar */}
-          <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 md:px-6 py-3">
-            <div className="relative max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <div className="bg-white border-b-2 border-slate-200 px-6 py-4">
+            <div className="relative max-w-xl">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="text"
-                placeholder="Search by name, email, or mobile..."
+                placeholder="SEARCH REGISTRY (NAME, EMAIL, MOBILE)..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none dark:text-white"
+                className="w-full pl-12 pr-4 py-3 text-xs font-bold bg-slate-50 border-2 border-slate-100 rounded-sm focus:border-[#003057] outline-none uppercase tracking-widest placeholder:text-slate-300"
               />
             </div>
           </div>
 
           {/* User Table */}
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto bg-white min-h-screen">
             <table className="w-full text-left">
               <thead>
-                <tr className="bg-gray-50 dark:bg-gray-800/80 border-b border-gray-200 dark:border-gray-700">
-                  <th className="px-4 md:px-6 py-3 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Contact</th>
-                  <th className="px-4 md:px-6 py-3 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
-                  <th className="px-4 md:px-6 py-3 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider hidden md:table-cell">Expires</th>
-                  <th className="px-4 md:px-6 py-3 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-right">Actions</th>
+                <tr className="bg-slate-50 border-b-2 border-slate-100">
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Entity Details</th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Access Status</th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest hidden md:table-cell">Expiry</th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Operations</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                 {filteredUsers.map((user) => (
                   <tr key={user.id} className="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors">
-                    <td className="px-4 md:px-6 py-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-500 dark:text-gray-400 shrink-0">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 bg-[#003057] text-[#99cc33] flex items-center justify-center text-sm font-black rounded-sm shrink-0">
                           {user.email?.[0]?.toUpperCase() || '?'}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{user.name || 'No Name'}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
-                          {user.mobile && <p className="text-xs text-blue-600 dark:text-blue-400">{user.mobile}</p>}
+                          <div className="flex items-center gap-2 mb-0.5">
+                            <p className="text-xs font-black text-[#003057] uppercase tracking-tight truncate">{user.name || 'Anonymous'}</p>
+                            <span className="text-[9px] px-1.5 py-0.5 bg-slate-100 text-[#003057] font-black uppercase tracking-widest rounded-sm border border-slate-200 shrink-0">{user.role}</span>
+                          </div>
+                          <p className="text-[10px] font-bold text-slate-400 truncate">{user.email}</p>
+                          {user.mobile && <p className="text-[10px] font-black text-[#99cc33] mt-0.5">{user.mobile}</p>}
                         </div>
-                        <span className="text-[9px] px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider shrink-0">{user.role}</span>
                       </div>
                     </td>
-                    <td className="px-4 md:px-6 py-3">
-                      <div className="flex items-center gap-1.5 flex-wrap">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2 flex-wrap">
                         {user.isBlocked ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-[10px] font-bold uppercase">
-                            <ShieldOff className="w-3 h-3" /> Blocked
+                          <span className="inline-flex items-center gap-1 px-3 py-1 bg-red-50 text-red-600 text-[9px] font-black uppercase tracking-widest border border-red-100 rounded-sm">
+                            <ShieldOff className="w-3 h-3" /> BLOCKED
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 text-[10px] font-bold uppercase">
-                            <Shield className="w-3 h-3" /> Active
+                          <span className="inline-flex items-center gap-1 px-3 py-1 bg-[#f7fff0] text-[#76a125] text-[9px] font-black uppercase tracking-widest border border-[#e6f4d7] rounded-sm">
+                            <Shield className="w-3 h-3" /> VERIFIED
                           </span>
                         )}
                         {user.isWhitelisted && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400 text-[10px] font-bold uppercase">
-                            <CheckCircle className="w-3 h-3" /> WL
+                          <span className="inline-flex items-center gap-1 px-3 py-1 bg-[#003057] text-white text-[9px] font-black uppercase tracking-widest rounded-sm">
+                            <CheckCircle className="w-3 h-3 text-[#99cc33]" /> WL
                           </span>
                         )}
                       </div>
@@ -476,46 +480,46 @@ export default function AdminPage() {
       {activeTab === 'smtp' && (
         <div className="grid grid-cols-1 lg:grid-cols-2">
           {/* SMTP Config */}
-          <div className="bg-white dark:bg-gray-900 border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-800 p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <Server className="w-5 h-5 text-blue-600" />
-              <h2 className="text-base font-bold text-gray-900 dark:text-white">SMTP Configuration</h2>
+          <div className="bg-white border-b-2 lg:border-b-0 lg:border-r-2 border-slate-200 p-8">
+            <div className="flex items-center gap-3 mb-8">
+              <Server className="w-5 h-5 text-[#003057]" />
+              <h2 className="text-sm font-black text-[#003057] uppercase tracking-[0.2em]">SMTP Configuration</h2>
             </div>
-            <form onSubmit={handleSaveSmtp} className="space-y-4">
+            <form onSubmit={handleSaveSmtp} className="space-y-6">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">Host</label>
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Host Address</label>
                   <input type="text" value={smtpConfig.SMTP_HOST} onChange={(e) => setSmtpConfig({ ...smtpConfig, SMTP_HOST: e.target.value })} placeholder="smtp.example.com"
-                    className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" />
+                    className="w-full px-4 py-3 text-xs font-bold bg-slate-50 border-2 border-slate-100 rounded-sm focus:border-[#003057] outline-none" />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">Port</label>
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Port</label>
                   <input type="text" value={smtpConfig.SMTP_PORT} onChange={(e) => setSmtpConfig({ ...smtpConfig, SMTP_PORT: e.target.value })} placeholder="465"
-                    className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" />
+                    className="w-full px-4 py-3 text-xs font-bold bg-slate-50 border-2 border-slate-100 rounded-sm focus:border-[#003057] outline-none" />
                 </div>
               </div>
               <div>
-                <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">Username</label>
+                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Service Username</label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <input type="text" value={smtpConfig.SMTP_USER} onChange={(e) => setSmtpConfig({ ...smtpConfig, SMTP_USER: e.target.value })} placeholder="noreply@example.com"
-                    className="w-full pl-10 pr-3 py-2 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" />
+                    className="w-full pl-12 pr-4 py-3 text-xs font-bold bg-slate-50 border-2 border-slate-100 rounded-sm focus:border-[#003057] outline-none" />
                 </div>
               </div>
               <div>
-                <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">Password</label>
+                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Service Password</label>
                 <div className="relative">
-                  <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Key className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <input type={showPass ? 'text' : 'password'} value={smtpConfig.SMTP_PASS} onChange={(e) => setSmtpConfig({ ...smtpConfig, SMTP_PASS: e.target.value })} placeholder="Your password"
-                    className="w-full pl-10 pr-10 py-2 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" />
-                  <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                    className="w-full pl-12 pr-12 py-3 text-xs font-bold bg-slate-50 border-2 border-slate-100 rounded-sm focus:border-[#003057] outline-none" />
+                  <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#003057]">
                     {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
               <button type="submit" disabled={smtpLoading}
-                className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-bold transition-colors flex items-center justify-center gap-2">
-                {smtpLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save SMTP Settings'}
+                className="w-full py-4 bg-[#003057] hover:bg-black disabled:opacity-50 text-white text-xs font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 border-b-4 border-black/20 rounded-sm">
+                {smtpLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save System Parameters'}
               </button>
             </form>
           </div>
@@ -578,14 +582,14 @@ export default function AdminPage() {
       {activeTab === 'faq' && (
         <div className="bg-white dark:bg-gray-900">
           {/* FAQ Header */}
-          <div className="flex items-center justify-between px-4 md:px-6 py-3 border-b border-gray-200 dark:border-gray-800">
+          <div className="flex items-center justify-between px-6 py-4 bg-white border-b-2 border-slate-200">
             <div>
-              <h2 className="text-base font-bold text-gray-900 dark:text-white">FAQ Management</h2>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Add or edit questions and answers.</p>
+              <h2 className="text-sm font-black text-[#003057] uppercase tracking-[0.2em]">Handbook FAQ Registry</h2>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Manage public study assistance content</p>
             </div>
             <button onClick={() => { setIsAddingFaq(true); setEditingFaq(null); setFaqForm({ question: '', answer: '', category: 'General', order: 0 }); }}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors">
-              <Plus className="w-3.5 h-3.5" /> Add FAQ
+              className="flex items-center gap-2 px-5 py-3 bg-[#003057] hover:bg-black text-white text-xs font-black uppercase tracking-widest rounded-sm transition-all border-b-4 border-black/20">
+              <Plus className="w-4 h-4 text-[#99cc33]" /> New Entry
             </button>
           </div>
 

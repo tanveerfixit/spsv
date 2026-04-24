@@ -38,31 +38,21 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="-m-3 md:-m-6 lg:-m-10 min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col font-sans">
-      {/* Top Bar */}
-      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shrink-0">
-        <div className="flex items-center justify-between px-6 h-14 max-w-7xl mx-auto w-full">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <Shield className="w-5 h-5 text-white" />
-            </div>
-            <h1 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">SPSV Study</h1>
-          </div>
-          <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest">
-            Recovery
-          </div>
-        </div>
-      </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center p-6 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-blue-50/50 via-transparent to-transparent dark:from-blue-900/10 dark:via-transparent dark:to-transparent">
-        <div className="w-full max-w-[400px]">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-2">
-              Forgot password?
-            </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
-              No problem. Enter your email and we&apos;ll send you a link to reset it.
-            </p>
-          </div>
+      <div className="flex-1 flex flex-col items-center justify-center p-6 bg-[#F2F5F7]">
+        <div className="w-full max-w-[420px]">
+          <div className="bg-white border-2 border-[#003057] rounded-sm p-8 md:p-10 shadow-2xl relative">
+            <div className="absolute top-0 left-0 w-full h-1 bg-[#99cc33]" />
+            
+            <div className="mb-8">
+              <h2 className="text-3xl font-black text-[#003057] uppercase italic tracking-tighter leading-none mb-2">
+                Reset Access
+              </h2>
+              <div className="h-1 w-12 bg-[#99cc33] mb-4" />
+              <p className="text-xs text-slate-500 font-bold uppercase tracking-widest leading-relaxed">
+                Enter your credentials to receive a secure restoration link.
+              </p>
+            </div>
 
           {success ? (
             <div className="text-center space-y-8 animate-in fade-in zoom-in-95 duration-300">
@@ -78,10 +68,10 @@ export default function ForgotPasswordPage() {
               <div className="pt-4">
                 <Link 
                   href="/login"
-                  className="w-full py-4 px-8 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-500/10"
+                  className="w-full py-4 px-8 bg-[#003057] text-white text-xs font-black uppercase tracking-[0.2em] rounded-sm hover:bg-black transition-all flex items-center justify-center gap-3 border-b-4 border-black/20"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  Return to sign in
+                  Return to Registry
                 </Link>
               </div>
             </div>
@@ -95,23 +85,23 @@ export default function ForgotPasswordPage() {
               )}
 
               <div className="relative group">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-[#003057] transition-colors" />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email Address"
-                  className="w-full pl-11 pr-4 py-3.5 text-sm font-medium bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition-all dark:text-white placeholder:text-gray-400 shadow-sm"
+                  placeholder="ACCOUNT EMAIL"
+                  className="w-full pl-12 pr-4 py-4 text-sm font-bold bg-slate-50 border-2 border-slate-100 rounded-sm focus:border-[#003057] outline-none transition-all placeholder:text-slate-300 shadow-sm"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-3 text-sm shadow-lg shadow-blue-500/10"
+                className="w-full py-5 bg-[#003057] hover:bg-black disabled:opacity-50 text-white text-xs font-black uppercase tracking-[0.2em] rounded-sm transition-all flex items-center justify-center gap-3 border-b-4 border-black/20"
               >
-                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Send reset link'}
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Send Reset Command'}
               </button>
 
               <div className="text-center pt-10">

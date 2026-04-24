@@ -1,8 +1,9 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
-import { FileText, ChevronRight, CheckCircle, Clock, Lock } from 'lucide-react';
+import { FileText, ChevronRight, CheckCircle, Clock, Lock, RotateCcw } from 'lucide-react';
 
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
@@ -10,21 +11,21 @@ const TESTS = [
   {
     title: 'Terminology Test',
     description: 'Test your knowledge of key SPSV industry terms and definitions.',
-    questions: 25,
+    questions: 50,
     time: '25 mins',
     available: true
   },
   {
     title: 'Chapter 1 Test',
     description: 'Assess your understanding of the SPSV industry, NTA role, and licensing.',
-    questions: 10,
+    questions: 50,
     time: '10 mins',
     available: true
   },
   {
     title: 'Chapter 2 Test',
     description: 'Test your knowledge on SPSV driver licensing, rights, and responsibilities.',
-    questions: 30,
+    questions: 40,
     time: '30 mins',
     available: true
   },
@@ -45,7 +46,7 @@ const TESTS = [
   {
     title: 'Chapter 5 Test',
     description: 'Test your understanding of working as an SPSV operator, including plying for hire and compliance.',
-    questions: 50,
+    questions: 60,
     time: '50 mins',
     available: true
   },
@@ -71,6 +72,31 @@ const TESTS = [
     available: false
   }
 ];
+
+function ResumeBadge({ category }: { category: string }) {
+  const [hasProgress, setHasProgress] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem(`spsv_sim_v1_${category}`);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.questions && parsed.questions.length > 0) {
+          setHasProgress(true);
+        }
+      } catch (e) {}
+    }
+  }, [category]);
+
+  if (!hasProgress) return null;
+
+  return (
+    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-[#99cc33] text-[#003057] text-[8px] font-black uppercase tracking-widest rounded-sm ml-2 border border-[#003057]/10">
+      <RotateCcw className="w-2.5 h-2.5" />
+      Resume Available
+    </span>
+  );
+}
 
 export default function AssessmentPage() {
   const { data: session, status } = useSession();
@@ -161,8 +187,9 @@ export default function AssessmentPage() {
               className="group flex flex-col p-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl hover:shadow-lg hover:shadow-green-500/5 hover:border-green-500 dark:hover:border-green-500/50 transition-all duration-200"
             >
               <div className="flex items-start justify-between mb-2">
-                <h3 className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                <h3 className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors flex items-center">
                   {test.title}
+                  <ResumeBadge category={test.title} />
                 </h3>
                 <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-green-500 transition-all transform group-hover:translate-x-0.5" />
               </div>

@@ -1,12 +1,13 @@
 import React from 'react';
 import Introduction from '@/components/content/Introduction';
-import TerminologyTest from '@/components/content/TerminologyTest';
 import Chapter1 from '@/components/content/Chapter1';
-import Chapter1Test from '@/components/content/Chapter1Test';
-import Chapter2Test from '@/components/content/Chapter2Test';
-import Chapter3Test from '@/components/content/Chapter3Test';
-import Chapter4Test from '@/components/content/Chapter4Test';
-import Chapter5Test from '@/components/content/Chapter5Test';
+import TestSimulator from '@/components/content/TestSimulator';
+import { maximumSpsvQuestions } from '@/lib/data/terminologyQuestions';
+import { chapter1IndustryQuestions } from '@/lib/data/chapter1Questions';
+import { chapter2DriverLicensingQuestions } from '@/lib/data/chapter2Questions';
+import { chapter3VehicleQuestions } from '@/lib/data/chapter3Questions';
+import { chapter4ExamQuestions } from '@/lib/data/chapter4Questions';
+import { chapter5SpsvQuestions } from '@/lib/data/chapter5Questions';
 
 export default async function ContentPage({ params }: { params: Promise<{ slug: string[] }> }) {
   const resolvedParams = await params;
@@ -17,27 +18,27 @@ export default async function ContentPage({ params }: { params: Promise<{ slug: 
   }
 
   if (slugPath === 'assessment/practice-tests/terminology-test') {
-    return <TerminologyTest />;
+    return <TestSimulator questions={maximumSpsvQuestions as any} category="Terminology Test" />;
   }
 
   if (slugPath === 'assessment/practice-tests/chapter-1-test') {
-    return <Chapter1Test />;
+    return <TestSimulator questions={chapter1IndustryQuestions} category="Chapter 1 Test" />;
   }
 
   if (slugPath === 'assessment/practice-tests/chapter-2-test') {
-    return <Chapter2Test />;
+    return <TestSimulator questions={chapter2DriverLicensingQuestions} category="Chapter 2 Test" />;
   }
 
   if (slugPath === 'assessment/practice-tests/chapter-3-test') {
-    return <Chapter3Test />;
+    return <TestSimulator questions={chapter3VehicleQuestions} category="Chapter 3 Test" />;
   }
 
   if (slugPath === 'assessment/practice-tests/chapter-4-test') {
-    return <Chapter4Test />;
+    return <TestSimulator questions={chapter4ExamQuestions as any} category="Chapter 4 Test" />;
   }
 
   if (slugPath === 'assessment/practice-tests/chapter-5-test') {
-    return <Chapter5Test />;
+    return <TestSimulator questions={chapter5SpsvQuestions} category="Chapter 5 Test" />;
   }
 
   if (slugPath.startsWith('official-manual/chapter-1-the-spsv-industry/')) {

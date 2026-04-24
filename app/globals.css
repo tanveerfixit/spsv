@@ -1,5 +1,20 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
+@theme {
+  --color-tfi-navy: #003057;
+  --color-tfi-lime: #99cc33;
+  --color-test-bg: #F2F5F7;
+}
+
+:root {
+  --background: #F2F5F7;
+  --foreground: #003057;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
 
 html.font-size-default {
   font-size: 17px !important;
@@ -15,4 +30,17 @@ html.font-size-large {
 
 html.font-size-large * {
   font-weight: 700 !important;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 15s linear infinite;
+}
+
+.hover\:pause:hover {
+  animation-play-state: paused;
 }

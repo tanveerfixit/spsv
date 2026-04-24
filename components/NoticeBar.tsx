@@ -31,7 +31,7 @@ export default function NoticeBar() {
   if (loading || !notice) return null;
 
   return (
-    <div className="bg-red-600 text-white overflow-hidden py-1.5 border-b border-red-700 shadow-sm relative z-50">
+    <div className="bg-[#003057] text-[#99cc33] overflow-hidden py-2 border-b-2 border-[#99cc33] shadow-sm relative z-50">
       <div className="whitespace-nowrap inline-block animate-marquee hover:pause whitespace-nowrap">
         <span className="inline-block px-4 font-bold text-sm">
           {notice}

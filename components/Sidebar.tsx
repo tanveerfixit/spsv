@@ -9,7 +9,7 @@ import SettingsMenu from './SettingsMenu';
 
 const SPSV_DATA = [
   {
-    title: 'Official Manual',
+    title: 'SPSV Handbook',
     icon: <BookOpen className="w-4 h-4" />,
     categories: [
       {
@@ -241,7 +241,7 @@ export default function Sidebar({ mobileOpen, setMobileOpen }: { mobileOpen: boo
                       {expandedCategories[category.title] && (
                         <div className="ml-2 mt-1 space-y-0.5">
                           {category.subCategories.map((sub) => {
-                            const topicSlug = topic.title === 'Official Manual' ? 'official-manual' : slugify(topic.title);
+                            const topicSlug = topic.title === 'SPSV Handbook' ? 'official-manual' : slugify(topic.title);
                             const catSlug = slugify(category.title);
                             const subSlug = slugify(sub);
                             const href = `/${topicSlug}/${catSlug}/${subSlug}`;

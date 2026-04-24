@@ -15,7 +15,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="w-full bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 transition-colors duration-200">
+    <footer className="w-full bg-[#003057] border-t-4 border-[#99cc33] transition-colors duration-200">
       <div className="mx-auto max-w-7xl px-4 py-6 md:py-10">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-x-8 gap-y-3 w-full md:w-auto">
@@ -23,7 +23,7 @@ export default function Footer() {
               <Link 
                 key={link.name} 
                 href={link.href}
-                className="flex items-center justify-center md:justify-start gap-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                className="flex items-center justify-center md:justify-start gap-1.5 text-sm font-bold text-gray-300 hover:text-[#99cc33] transition-colors"
               >
                 {link.icon}
                 {link.name}
@@ -31,8 +31,8 @@ export default function Footer() {
             ))}
           </div>
           
-          <p className="text-xs text-gray-500 dark:text-gray-500 text-center md:text-right w-full md:w-auto">
-            &copy; {currentYear} SPSV Study & Test. All rights reserved.
+          <p className="text-xs text-gray-400 text-center md:text-right w-full md:w-auto">
+            &copy; {currentYear} SPSV Knowledge Hub. All rights reserved.
           </p>
         </div>
       </div>

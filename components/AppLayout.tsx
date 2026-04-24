@@ -29,7 +29,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }, [pathname, isInitialLoad, router]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-950 font-sans text-gray-900 dark:text-gray-100">
+    <div className="flex flex-col min-h-screen bg-[#F2F5F7] font-sans text-[#003057]">
       {showNoticeBar && <NoticeBar />}
 
       <Header onMenuClick={() => {}} />
