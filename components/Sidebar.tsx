@@ -158,7 +158,7 @@ const SPSV_DATA = [
     categories: [
       {
         title: 'Practice Tests',
-        subCategories: ['Terminology Test', 'Chapter 1 Test', 'Chapter 2 Test', 'Chapter 3 Test', 'Industry Knowledge Test', 'Area Knowledge Test', 'Full Mock Exam']
+        subCategories: ['Terminology Test', 'Chapter 1 Test', 'Chapter 2 Test', 'Chapter 3 Test', 'Chapter 4 Test', 'Chapter 5 Test', 'Chapter 6 Test', 'Chapter 7 Test', 'Chapter 8 Test', 'Chapter 9 Test', 'Chapter 10 Test', 'Industry Knowledge Test', 'Area Knowledge Test', 'Final Mock Test']
       }
     ]
   }

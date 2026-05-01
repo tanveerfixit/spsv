@@ -51,6 +51,41 @@ const TESTS = [
     available: true
   },
   {
+    title: 'Chapter 6 Test',
+    description: 'Test your navigation skills, route planning, and use of GPS technology.',
+    questions: 50,
+    time: '45 mins',
+    available: true
+  },
+  {
+    title: 'Chapter 7 Test',
+    description: 'Assess your knowledge of taxi fares, hackney rates, and payment regulations.',
+    questions: 50,
+    time: '45 mins',
+    available: true
+  },
+  {
+    title: 'Chapter 8 Test',
+    description: 'Evaluate your customer service skills and assistance for passengers with disabilities.',
+    questions: 50,
+    time: '45 mins',
+    available: true
+  },
+  {
+    title: 'Chapter 9 Test',
+    description: 'Test your understanding of running an SPSV business and choosing business models.',
+    questions: 50,
+    time: '45 mins',
+    available: true
+  },
+  {
+    title: 'Chapter 10 Test',
+    description: 'Knowledge of safety procedures, emergency handling, and personal security.',
+    questions: 80,
+    time: '60 mins',
+    available: true
+  },
+  {
     title: 'Industry Knowledge Test',
     description: 'Comprehensive test covering all chapters of the Official Manual.',
     questions: 54,
@@ -65,11 +100,12 @@ const TESTS = [
     available: false
   },
   {
-    title: 'Full Mock Exam',
-    description: 'Simulate the real SPSV test with both Industry and Area Knowledge sections.',
+    title: 'Final Mock Test',
+    description: 'Full exam simulation. Choose between a standard 90-question mock or an AI-powered weak area test.',
     questions: 90,
     time: '105 mins',
-    available: false
+    available: true,
+    href: '/assessment/final-mock'
   }
 ];
 
@@ -151,7 +187,7 @@ export default function AssessmentPage() {
       {/* Assessment Grid */}
       <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 ${!isAuthenticated ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
         {TESTS.map((test) => {
-          const href = `/assessment/practice-tests/${slugify(test.title)}`;
+          const href = (test as any).href ?? `/assessment/practice-tests/${slugify(test.title)}`;
           
           if (!test.available) {
             return (

@@ -12,25 +12,30 @@ const MANUAL_CHAPTERS = [
   { title: 'Ch 2 – Driver Licensing', href: '/official-manual/chapter-2-spsv-driver-licensing/2-1-introduction-to-the-spsv-driver-licence' },
   { title: 'Ch 3 – Choosing a Vehicle', href: '/official-manual/chapter-3-choosing-a-vehicle/3-1-vehicle-standards-for-spsvs' },
   { title: 'Ch 4 – Vehicle Licensing', href: '/official-manual/chapter-4-vehicle-licensing/4-1-about-the-spsv-vehicle-licence' },
-  { title: 'Ch 5 – Working as Operator', href: '/official-manual/chapter-5-working-as-an-spsv-operator/5-1-vehicle-requirements' },
-  { title: 'Ch 6 – Finding Your Way', href: '/official-manual/chapter-6-finding-your-way-around/6-1-the-importance-of-route-planning' },
+  { title: 'Ch 5 – Working as Operator', href: '/official-manual/chapter-5-working-as-an-operator/5-1-vehicle-requirements' },
+  { title: 'Ch 6 – Finding Your Way', href: '/official-manual/chapter-6-finding-your-way/6-1-the-importance-of-route-planning' },
   { title: 'Ch 7 – Fares', href: '/official-manual/chapter-7-fares/7-1-taxi-fares' },
-  { title: 'Ch 8 – Customer Service', href: '/official-manual/chapter-8-delivering-customer-satisfaction/8-1-nta-s-role-in-customer-service' },
+  { title: 'Ch 8 – Customer Service', href: '/official-manual/chapter-8-customer-satisfaction/8-1-nta-s-role-in-customer-service' },
   { title: 'Ch 9 – Your Business', href: '/official-manual/chapter-9-your-spsv-business/9-1-working-in-the-spsv-industry' },
   { title: 'Ch 10 – Staying Safe', href: '/official-manual/chapter-10-staying-safe/10-1-nta-s-role-in-safety' },
-  { title: 'Ch 11 – Module Overview', href: '/official-manual/chapter-11-preparing-for-your-test/11-1-testing-in-the-skills-development-programme' },
+  { title: 'Ch 11 – Module Overview', href: '/official-manual/chapter-11-preparing-for-test/11-1-testing-in-the-skills-development-programme' },
 ];
 
 const ASSESSMENT_ITEMS = [
-  { title: 'Terminology Practice', href: '/assessment/practice-tests/terminology-test' },
+  { title: 'Terminology', href: '/assessment/practice-tests/terminology-test' },
   { title: 'Chapter 1 Review', href: '/assessment/practice-tests/chapter-1-test' },
   { title: 'Chapter 2 Review', href: '/assessment/practice-tests/chapter-2-test' },
   { title: 'Chapter 3 Review', href: '/assessment/practice-tests/chapter-3-test' },
   { title: 'Chapter 4 Review', href: '/assessment/practice-tests/chapter-4-test' },
   { title: 'Chapter 5 Review', href: '/assessment/practice-tests/chapter-5-test' },
+  { title: 'Chapter 6 Review', href: '/assessment/practice-tests/chapter-6-test' },
+  { title: 'Chapter 7 Review', href: '/assessment/practice-tests/chapter-7-test' },
+  { title: 'Chapter 8 Review', href: '/assessment/practice-tests/chapter-8-test' },
+  { title: 'Chapter 9 Review', href: '/assessment/practice-tests/chapter-9-test' },
+  { title: 'Chapter 10 Review', href: '/assessment/practice-tests/chapter-10-test' },
   { title: 'Industry Knowledge', href: '/assessment/practice-tests/industry-knowledge-test' },
   { title: 'Area Knowledge', href: '/assessment/practice-tests/area-knowledge-test' },
-  { title: 'Full Practice Exam', href: '/assessment/practice-tests/full-mock-exam' },
+  { title: 'Final Mock Test', href: '/assessment/final-mock' },
 ];
 
 export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
