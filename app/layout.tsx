@@ -6,7 +6,10 @@ import { SettingsProvider } from '@/components/SettingsProvider';
 import SessionProvider from '@/components/providers/SessionProvider';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ 
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
 
 export const metadata: Metadata = {
   title: 'SPSV Study & Mock Test - Pass Your NTA Driver Entrance Test',
@@ -41,7 +44,7 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en">
-      <body className={inter.className} suppressHydrationWarning>
+      <body className={`${inter.className} ${inter.variable} antialiased`} suppressHydrationWarning>
         <ErrorBoundary>
           <SessionProvider>
             <SettingsProvider>

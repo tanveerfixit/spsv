@@ -1,9 +1,19 @@
 import React from 'react';
 import Introduction from '@/components/content/Introduction';
-import TerminologyTest from '@/components/content/TerminologyTest';
 import Chapter1 from '@/components/content/Chapter1';
-import Chapter1Test from '@/components/content/Chapter1Test';
-import Chapter2Test from '@/components/content/Chapter2Test';
+import TestSimulator from '@/components/content/TestSimulator';
+import { maximumSpsvQuestions } from '@/lib/data/terminologyQuestions';
+import { chapter1IndustryQuestions } from '@/lib/data/chapter1Questions';
+import { chapter2DriverLicensingQuestions } from '@/lib/data/chapter2Questions';
+import { chapter3VehicleQuestions } from '@/lib/data/chapter3Questions';
+import { chapter4ExamQuestions } from '@/lib/data/chapter4Questions';
+import { chapter5SpsvQuestions } from '@/lib/data/chapter5Questions';
+import { chapter6NavigationQuestions } from '@/lib/data/chapter6Questions';
+import { chapter7FaresQuestions } from '@/lib/data/chapter7Questions';
+import { chapter8CustomerServiceQuestions } from '@/lib/data/chapter8Questions';
+import { chapter9BusinessQuestions } from '@/lib/data/chapter9Questions';
+import { chapter10SafetyQuestions } from '@/lib/data/chapter10Questions';
+import { allSpsvQuestions } from '@/lib/data/mockData';
 
 export default async function ContentPage({ params }: { params: Promise<{ slug: string[] }> }) {
   const resolvedParams = await params;
@@ -14,15 +24,59 @@ export default async function ContentPage({ params }: { params: Promise<{ slug: 
   }
 
   if (slugPath === 'assessment/practice-tests/terminology-test') {
-    return <TerminologyTest />;
+    return <TestSimulator questions={maximumSpsvQuestions as any} category="Terminology Test" />;
   }
 
   if (slugPath === 'assessment/practice-tests/chapter-1-test') {
-    return <Chapter1Test />;
+    return <TestSimulator questions={chapter1IndustryQuestions} category="Chapter 1 Test" />;
   }
 
   if (slugPath === 'assessment/practice-tests/chapter-2-test') {
-    return <Chapter2Test />;
+    return <TestSimulator questions={chapter2DriverLicensingQuestions} category="Chapter 2 Test" />;
+  }
+
+  if (slugPath === 'assessment/practice-tests/chapter-3-test') {
+    return <TestSimulator questions={chapter3VehicleQuestions} category="Chapter 3 Test" />;
+  }
+
+  if (slugPath === 'assessment/practice-tests/chapter-4-test') {
+    return <TestSimulator questions={chapter4ExamQuestions as any} category="Chapter 4 Test" />;
+  }
+
+  if (slugPath === 'assessment/practice-tests/chapter-5-test') {
+    return <TestSimulator questions={chapter5SpsvQuestions} category="Chapter 5 Test" />;
+  }
+
+  if (slugPath === 'assessment/practice-tests/chapter-6-test') {
+    return <TestSimulator questions={chapter6NavigationQuestions} category="Chapter 6 Test" />;
+  }
+
+  if (slugPath === 'assessment/practice-tests/chapter-7-test') {
+    return <TestSimulator questions={chapter7FaresQuestions} category="Chapter 7 Test" />;
+  }
+
+  if (slugPath === 'assessment/practice-tests/chapter-8-test') {
+    return <TestSimulator questions={chapter8CustomerServiceQuestions} category="Chapter 8 Test" />;
+  }
+
+  if (slugPath === 'assessment/practice-tests/chapter-9-test') {
+    return <TestSimulator questions={chapter9BusinessQuestions} category="Chapter 9 Test" />;
+  }
+
+  if (slugPath === 'assessment/practice-tests/chapter-10-test') {
+    return <TestSimulator questions={chapter10SafetyQuestions} category="Chapter 10 Test" />;
+  }
+
+  if (slugPath === 'assessment/practice-tests/standard-mock-exam') {
+    // Shuffle and take 90 questions for a standard mock
+    const shuffled = [...allSpsvQuestions].sort(() => 0.5 - Math.random());
+    return <TestSimulator questions={shuffled.slice(0, 90)} category="Standard Mock Exam" />;
+  }
+
+  if (slugPath === 'assessment/practice-tests/ai-weakness-test' || slugPath === 'assessment/practice-tests/ai-weak-area-test') {
+    // For now, take a smaller random set or implementation-specific logic
+    const shuffled = [...allSpsvQuestions].sort(() => 0.5 - Math.random());
+    return <TestSimulator questions={shuffled.slice(0, 50)} category="AI Weak Area Test" />;
   }
 
   if (slugPath.startsWith('official-manual/chapter-1-the-spsv-industry/')) {

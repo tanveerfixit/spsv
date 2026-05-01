@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 import prisma from '@/lib/prisma';
 import { sendEmail } from '@/lib/mail';
 
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'User already exists' }, { status: 400 });
     }
 
-    // Hash the password
+    // Hash the password (using native bcrypt which is much faster)
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Default Role (Initial Admin)
@@ -39,30 +39,26 @@ export async function POST(req: Request) {
         password: hashedPassword,
         mobile,
         role,
-        expiresAt: isAdmin ? null : expiresAt, // Admins don't have trial expiration
-        isWhitelisted: isAdmin, // Admins are whitelisted
+        expiresAt: isAdmin ? null : expiresAt, 
+        isWhitelisted: isAdmin,
       },
     });
 
-    // Send welcome email
-    try {
-      await sendEmail({
-        to: email,
-        subject: 'Welcome to SPSV Study & Test!',
-        text: `Hi ${name}, welcome to the platform. Your 10-day trial starts now. Enjoy!`,
-        html: `
-          <div style="font-family: sans-serif; padding: 20px;">
-            <h2>Welcome to SPSV Study & Test!</h2>
-            <p>Hi ${name},</p>
-            <p>Your account has been created successfully. You have <strong>10 days of free trial access</strong> to the platform.</p>
-            <p>Your trial expires on: <strong>${expiresAt.toDateString()}</strong></p>
-            <p>Good luck with your study!</p>
-          </div>
-        `
-      });
-    } catch (e) {
-      console.error('Error sending welcome email:', e);
-    }
+    // Send welcome email (Non-blocking: fire and forget to avoid delaying the response)
+    sendEmail({
+      to: email,
+      subject: 'Welcome to SPSV Study & Test!',
+      text: `Hi ${name}, welcome to the platform. Your 10-day trial starts now. Enjoy!`,
+      html: `
+        <div style="font-family: sans-serif; padding: 20px;">
+          <h2>Welcome to SPSV Study & Test!</h2>
+          <p>Hi ${name},</p>
+          <p>Your account has been created successfully. You have <strong>10 days of free trial access</strong> to the platform.</p>
+          <p>Your trial expires on: <strong>${expiresAt.toDateString()}</strong></p>
+          <p>Good luck with your study!</p>
+        </div>
+      `
+    }).catch(e => console.error('Error sending welcome email (background):', e));
 
     return NextResponse.json({ message: 'User created successfully', user: { id: newUser.id, name: newUser.name, email: newUser.email } }, { status: 201 });
   } catch (error) {
