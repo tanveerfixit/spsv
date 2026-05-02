@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { ChevronRight, RotateCcw, CheckCircle2, XCircle, Info, Trophy, ShieldCheck, Scale, FileText, BookOpen, Car, AlertCircle, Shield } from 'lucide-react';
+import { ChevronRight, RotateCcw, CheckCircle2, XCircle, Info, Trophy, ShieldCheck, Scale, FileText, BookOpen, Car, AlertCircle, Shield, Clock } from 'lucide-react';
 
 interface Question {
   id: number;
@@ -45,6 +45,11 @@ export default function TestSimulator({ questions: initialQuestions, category, p
   const [isSaving, setIsSaving] = useState(false);
   const [hasStoredProgress, setHasStoredProgress] = useState(false);
   const [storedData, setStoredData] = useState<any>(null);
+  const [testId, setTestId] = useState<string | null>(null);
+  const [activeSeconds, setActiveSeconds] = useState(0);
+  const [lastInteractionTime, setLastInteractionTime] = useState(Date.now());
+
+
 
   // Initialize test or check for existing progress
   useEffect(() => {
@@ -87,7 +92,35 @@ export default function TestSimulator({ questions: initialQuestions, category, p
     }
   }, [initialQuestions, category]);
 
+  // Timer and Interaction Tracking
+  useEffect(() => {
+    if (currentStep !== 'quiz') return;
+
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const idleLimit = 10 * 60 * 1000; // 10 minutes
+
+      if (now - lastInteractionTime < idleLimit) {
+        setActiveSeconds(s => s + 1);
+      }
+    }, 1000);
+
+    const handleInteraction = () => setLastInteractionTime(Date.now());
+
+    window.addEventListener('mousemove', handleInteraction);
+    window.addEventListener('keydown', handleInteraction);
+    window.addEventListener('click', handleInteraction);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('mousemove', handleInteraction);
+      window.removeEventListener('keydown', handleInteraction);
+      window.removeEventListener('click', handleInteraction);
+    };
+  }, [currentStep, lastInteractionTime]);
+
   // Save progress logic
+
   useEffect(() => {
     if (currentStep === 'quiz' && questions.length > 0) {
       const storageKey = `spsv_sim_v1_${category}`;
@@ -97,11 +130,14 @@ export default function TestSimulator({ questions: initialQuestions, category, p
         score,
         history,
         startTime,
+        testId,
+        activeSeconds,
         timestamp: Date.now()
       };
       localStorage.setItem(storageKey, JSON.stringify(dataToSave));
     }
-  }, [currentStep, currentIndex, score, history, questions, category, startTime]);
+  }, [currentStep, currentIndex, score, history, questions, category, startTime, testId, activeSeconds]);
+
 
   const handleStart = () => {
     const storageKey = `spsv_sim_v1_${category}`;
@@ -114,6 +150,11 @@ export default function TestSimulator({ questions: initialQuestions, category, p
     setSelectedOption(null);
     setIsLocked(false);
     setStartTime(Date.now());
+    setActiveSeconds(0);
+    setLastInteractionTime(Date.now());
+    setTestId(null); // Clear previous test session ID
+
+
     
     // Re-initialize questions for a fresh start
     if (initialQuestions.length > 0) {
@@ -144,9 +185,14 @@ export default function TestSimulator({ questions: initialQuestions, category, p
       setScore(storedData.score);
       setHistory(storedData.history);
       setStartTime(storedData.startTime || Date.now());
+      setActiveSeconds(storedData.activeSeconds || 0);
+      setLastInteractionTime(Date.now());
+      setTestId(storedData.testId || null); // Restore testId if it was saved locally
       setCurrentStep('quiz');
+
       setHasStoredProgress(false);
     }
+
   };
 
   const handleStartFresh = () => {
@@ -168,14 +214,22 @@ export default function TestSimulator({ questions: initialQuestions, category, p
       isCorrect = currentQ.options[idx] === currentQ.correctAnswer;
     }
     
+    
     if (isCorrect) setScore(s => s + 1);
     
-    setHistory([...history, { 
+    const newHistory = [...history, { 
       questionId: currentQ.id, 
       isCorrect, 
       selected: idx 
-    }]);
+    }];
+    setHistory(newHistory);
+
+    // Save to DB immediately if user is logged in
+    if (session?.user) {
+      saveResult(newHistory, isCorrect ? score + 1 : score);
+    }
   };
+
 
   const handleNext = async () => {
     if (currentIndex < questions.length - 1) {
@@ -184,34 +238,69 @@ export default function TestSimulator({ questions: initialQuestions, category, p
       setIsLocked(false);
     } else {
       setCurrentStep('result');
-      if (session?.user) {
-        await saveResult();
-      }
+      // No need to call saveResult here as it's saved on each question
       localStorage.removeItem(`spsv_sim_v1_${category}`);
     }
+
   };
 
-  const saveResult = async () => {
+  const saveResult = async (currentHistory = history, currentScore = score) => {
     if (!session?.user) return;
     setIsSaving(true);
     try {
-      const timeSpentSeconds = Math.floor((Date.now() - startTime) / 1000);
-      await fetch('/api/results', {
+      const timeSpentSeconds = activeSeconds; // Use tracked active duration
+      const wrongAnswers = currentHistory.filter(h => !h.isCorrect).length;
+
+      const skippedAnswers = questions.length - currentHistory.length;
+      
+      const responses = currentHistory.map(h => {
+        const q = questions.find(q => q.id === h.questionId);
+        return {
+          questionId: h.questionId,
+          question: q?.question,
+          isCorrect: h.isCorrect,
+          selectedAnswer: q?.options[h.selected],
+          correctAnswer: q?.correctAnswer || (typeof q?.correct === 'number' ? q?.options[q.correct] : null),
+          chapter: q?.category || category
+        };
+      });
+
+      const res = await fetch('/api/results', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          id: testId, // Include testId if we have one (for updates)
           category,
-          score,
+          score: currentScore,
           totalQuestions: questions.length,
+          wrongAnswers,
+          skippedAnswers,
           timeSpentSeconds,
+          responses
         }),
       });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.id && !testId) {
+          setTestId(data.id);
+          // Also update localStorage so resume works correctly
+          const storageKey = `spsv_sim_v1_${category}`;
+          const saved = localStorage.getItem(storageKey);
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            parsed.testId = data.id;
+            localStorage.setItem(storageKey, JSON.stringify(parsed));
+          }
+        }
+      }
     } catch (error) {
       console.error('Error saving result:', error);
     } finally {
       setIsSaving(false);
     }
   };
+
 
   // Icon mapping based on category string to avoid passing JSX from Server Components
   const getIcon = (q?: Question) => {
@@ -344,9 +433,16 @@ export default function TestSimulator({ questions: initialQuestions, category, p
                 </div>
                 <span className="font-black uppercase text-xs tracking-widest">{currentQ.category || category}</span>
               </div>
-              <div className="font-mono text-sm font-bold bg-slate-100 px-3 py-1 rounded-sm border border-slate-200">
-                Question {currentIndex + 1} / {questions.length}
+              <div className="flex flex-col items-end gap-1">
+                <div className="font-mono text-sm font-bold bg-slate-100 px-3 py-1 rounded-sm border border-slate-200">
+                  Question {currentIndex + 1} / {questions.length}
+                </div>
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                  <Clock className="w-3 h-3" />
+                  {Math.floor(activeSeconds / 60)}m {activeSeconds % 60}s active
+                </div>
               </div>
+
             </div>
 
             {/* Question Body */}
@@ -488,6 +584,17 @@ export default function TestSimulator({ questions: initialQuestions, category, p
                     <span className="text-2xl font-black text-[#003057]">{questions.length - score}</span>
                   </div>
                 </div>
+
+                <div className="bg-slate-50 p-4 border border-slate-200 rounded-sm flex items-center justify-between">
+                   <div>
+                      <span className="block text-xs font-bold text-slate-400 uppercase tracking-widest">Total Active Duration</span>
+                      <span className="text-xl font-black text-[#003057]">
+                        {Math.floor(activeSeconds / 60)}m {activeSeconds % 60}s
+                      </span>
+                   </div>
+                   <Clock className="w-6 h-6 text-slate-300" />
+                </div>
+
               </div>
             </div>
 

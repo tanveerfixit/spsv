@@ -28,10 +28,13 @@ model User {
 model TestResult {
   id               String   @id @default(cuid())
   userId           String
-  category         String
-  score            Int
+  category         String   // e.g., "Chapter 1", "Final Mock"
+  score            Int      // Number of correct answers
   totalQuestions   Int
+  wrongAnswers     Int      @default(0)
+  skippedAnswers   Int      @default(0)
   timeSpentSeconds Int
+  responses        Json?    // Detailed question-by-question data
   completedAt      DateTime @default(now())
   user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 

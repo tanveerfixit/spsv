@@ -28,15 +28,46 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { category, score, totalQuestions, timeSpentSeconds } = await req.json();
+    const { 
+      id,
+      category, 
+      score, 
+      totalQuestions, 
+      wrongAnswers, 
+      skippedAnswers, 
+      timeSpentSeconds,
+      responses 
+    } = await req.json();
 
+    const userId = (session.user as any).id;
+
+    if (id) {
+      // Update existing result
+      const updatedResult = await prisma.testResult.update({
+        where: { id },
+        data: {
+          score,
+          totalQuestions,
+          wrongAnswers: wrongAnswers || 0,
+          skippedAnswers: skippedAnswers || 0,
+          timeSpentSeconds,
+          responses: responses || [],
+        }
+      });
+      return NextResponse.json(updatedResult);
+    }
+
+    // Create new result
     const newResult = await prisma.testResult.create({
       data: {
-        userId: (session.user as any).id,
+        userId,
         category,
         score,
         totalQuestions,
+        wrongAnswers: wrongAnswers || 0,
+        skippedAnswers: skippedAnswers || 0,
         timeSpentSeconds,
+        responses: responses || [],
       },
     });
 

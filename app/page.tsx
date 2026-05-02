@@ -39,13 +39,7 @@ export default function Home() {
       href: '/assessment',
       icon: <List className="w-8 h-8" />,
     },
-    {
-      title: 'Final Mock Test',
-      subtitle: 'PRACTICE EXAM',
-      description: 'Verify your knowledge with a full-length practice assessment.',
-      href: '/assessment',
-      icon: <GraduationCap className="w-8 h-8" />,
-    },
+
     {
       title: 'PERFORMANCE',
       subtitle: 'DASHBOARD',

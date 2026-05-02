@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
-import { FileText, ChevronRight, CheckCircle, Clock, Lock, RotateCcw } from 'lucide-react';
+import { FileText, ChevronRight, CheckCircle, Clock, Lock, RotateCcw, BookOpen } from 'lucide-react';
 
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
@@ -99,14 +99,7 @@ const TESTS = [
     time: '45 mins',
     available: false
   },
-  {
-    title: 'Final Mock Test',
-    description: 'Full exam simulation. Choose between a standard 90-question mock or an AI-powered weak area test.',
-    questions: 90,
-    time: '105 mins',
-    available: true,
-    href: '/assessment/final-mock'
-  }
+
 ];
 
 function ResumeBadge({ category }: { category: string }) {
@@ -245,6 +238,41 @@ export default function AssessmentPage() {
             </Link>
           );
         })}
+      </div>
+
+      {/* Special Tests Section */}
+      <div className={`mt-10 grid grid-cols-1 md:grid-cols-2 gap-4 ${!isAuthenticated ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
+        <Link 
+          href="/assessment/special/weak"
+          className="flex items-center justify-between p-6 bg-[#003057] text-white rounded-xl hover:bg-black transition-all group shadow-xl border-b-4 border-black/30"
+        >
+          <div className="flex items-center gap-4">
+            <div className="bg-[#99cc33] p-3 rounded-lg shadow-inner">
+              <RotateCcw className="w-6 h-6 text-[#003057]" />
+            </div>
+            <div>
+              <h3 className="font-black uppercase tracking-tight text-lg">Re-Practice Weak Questions</h3>
+              <p className="text-[10px] text-[#99cc33] font-black uppercase tracking-widest opacity-80">Review your past mistakes</p>
+            </div>
+          </div>
+          <ChevronRight className="w-6 h-6 text-[#99cc33] group-hover:translate-x-1 transition-transform" />
+        </Link>
+
+        <Link 
+          href="/assessment/special/industry-test"
+          className="flex items-center justify-between p-6 bg-white border-2 border-[#003057] text-[#003057] rounded-xl hover:bg-[#f8fafc] transition-all group shadow-xl border-b-4 border-[#003057]/20"
+        >
+          <div className="flex items-center gap-4">
+            <div className="bg-[#003057] p-3 rounded-lg">
+              <BookOpen className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="font-black uppercase tracking-tight text-lg">Industry Knowledge Test</h3>
+              <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">54 Questions • Comprehensive Exam</p>
+            </div>
+          </div>
+          <ChevronRight className="w-6 h-6 text-[#003057] group-hover:translate-x-1 transition-transform" />
+        </Link>
       </div>
     </div>
   );

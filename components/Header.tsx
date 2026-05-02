@@ -35,7 +35,7 @@ const ASSESSMENT_ITEMS = [
   { title: 'Chapter 10 Review', href: '/assessment/practice-tests/chapter-10-test' },
   { title: 'Industry Knowledge', href: '/assessment/practice-tests/industry-knowledge-test' },
   { title: 'Area Knowledge', href: '/assessment/practice-tests/area-knowledge-test' },
-  { title: 'Final Mock Test', href: '/assessment/final-mock' },
+
 ];
 
 export default function Header({ onMenuClick }: { onMenuClick: () => void }) {

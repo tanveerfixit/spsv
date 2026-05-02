@@ -10,7 +10,10 @@ interface TestResult {
   category: string;
   score: number;
   totalQuestions: number;
+  wrongAnswers?: number;
+  skippedAnswers?: number;
   timeSpentSeconds: number;
+  responses?: any[];
   completedAt: string;
 }
 
@@ -73,6 +76,8 @@ export default function DashboardPage() {
   const totalTests = results.length;
   const totalQuestions = results.reduce((acc, r) => acc + r.totalQuestions, 0);
   const totalCorrect = results.reduce((acc, r) => acc + r.score, 0);
+  const totalWrong = results.reduce((acc, r) => acc + (r.wrongAnswers || 0), 0);
+  const totalSkipped = results.reduce((acc, r) => acc + (r.skippedAnswers || 0), 0);
   const averageScore = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
   const totalTimeSeconds = results.reduce((acc, r) => acc + (r.timeSpentSeconds || 0), 0);
   
@@ -101,6 +106,30 @@ export default function DashboardPage() {
     .filter(c => c.percentage < 80)
     .sort((a, b) => a.percentage - b.percentage);
 
+  // Analyze frequently missed questions
+  const questionAnalysis = results.flatMap(r => r.responses || []).reduce((acc, resp) => {
+    if (!resp.questionId) return acc;
+    if (!acc[resp.questionId]) {
+      acc[resp.questionId] = { 
+        id: resp.questionId, 
+        text: resp.question, 
+        wrongCount: 0, 
+        totalCount: 0,
+        chapter: resp.chapter
+      };
+    }
+    acc[resp.questionId].totalCount += 1;
+    if (!resp.isCorrect) {
+      acc[resp.questionId].wrongCount += 1;
+    }
+    return acc;
+  }, {} as Record<string, any>);
+
+  const missedQuestions = Object.values(questionAnalysis)
+    .filter((q: any) => q.wrongCount > 0)
+    .sort((a: any, b: any) => b.wrongCount - a.wrongCount)
+    .slice(0, 5);
+
   return (
     <div className="-m-3 md:-m-6 lg:-m-10 min-h-screen bg-[#F2F5F7]">
       {/* Top Bar (Prometric Style) */}
@@ -121,23 +150,23 @@ export default function DashboardPage() {
         <div className="p-6 border-r-2 border-slate-100">
           <div className="flex items-center gap-2 mb-2">
             <CheckCircle className="w-4 h-4 text-[#003057]" />
-            <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Sessions</span>
+            <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Correct</span>
           </div>
-          <span className="text-3xl font-black text-[#003057] tracking-tighter italic">{totalTests}</span>
+          <span className="text-3xl font-black text-[#99cc33] tracking-tighter italic">{totalCorrect}</span>
         </div>
         <div className="p-6 md:border-r-2 border-slate-100 bg-slate-50/50">
           <div className="flex items-center gap-2 mb-2">
-            <Target className="w-4 h-4 text-[#99cc33]" />
-            <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Avg Result</span>
+            <AlertCircle className="w-4 h-4 text-red-600" />
+            <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Wrong</span>
           </div>
-          <span className="text-3xl font-black text-[#003057] tracking-tighter italic">{averageScore}%</span>
+          <span className="text-3xl font-black text-red-600 tracking-tighter italic">{totalWrong}</span>
         </div>
         <div className="p-6 border-r-2 border-slate-100 border-t-2 md:border-t-0">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="w-4 h-4 text-[#003057]" />
-            <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Knowledge Point</span>
+            <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Accuracy</span>
           </div>
-          <span className="text-3xl font-black text-[#003057] tracking-tighter italic">{totalQuestions}</span>
+          <span className="text-3xl font-black text-[#003057] tracking-tighter italic">{averageScore}%</span>
         </div>
         <div className="p-6 border-t-2 md:border-t-0 bg-slate-50/50">
           <div className="flex items-center gap-2 mb-2">
@@ -207,30 +236,59 @@ export default function DashboardPage() {
             <AlertCircle className="w-4 h-4 text-red-500" />
           </div>
 
-          <div className="p-4 md:p-6">
-            {weakCategories.length === 0 ? (
-              <div className="text-center py-6">
-                <CheckCircle className="w-8 h-8 text-green-500 mx-auto mb-2" />
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {totalTests > 0 ? "All categories above 80%. Keep it up!" : "Take tests to see weak areas here."}
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {weakCategories.map((weak) => (
-                  <div key={weak.category} className="bg-white p-4 border-2 border-slate-200 rounded-sm relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-1 h-full bg-red-500" />
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-[11px] font-black text-[#003057] uppercase tracking-wider">{weak.category}</span>
-                      <span className="text-xs font-black text-red-600 italic">{weak.percentage}%</span>
+          <div className="p-4 md:p-6 space-y-8">
+            {/* Weak Categories */}
+            <div>
+              <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Weak Categories</h4>
+              {weakCategories.length === 0 ? (
+                <div className="text-center py-6 bg-white border border-slate-100 rounded-sm">
+                  <CheckCircle className="w-8 h-8 text-green-500 mx-auto mb-2" />
+                  <p className="text-[10px] text-gray-500 uppercase font-bold">All categories stable</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {weakCategories.map((weak) => (
+                    <div key={weak.category} className="bg-white p-4 border-2 border-slate-200 rounded-sm relative overflow-hidden">
+                      <div className="absolute top-0 left-0 w-1 h-full bg-red-500" />
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-[11px] font-black text-[#003057] uppercase tracking-wider">{weak.category}</span>
+                        <span className="text-xs font-black text-red-600 italic">{weak.percentage}%</span>
+                      </div>
+                      <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div className="h-full bg-red-500 transition-all duration-700" style={{ width: `${weak.percentage}%` }} />
+                      </div>
                     </div>
-                    <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                      <div className="h-full bg-red-500 transition-all duration-700" style={{ width: `${weak.percentage}%` }} />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Missed Questions */}
+            <div>
+              <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Frequently Missed</h4>
+              {missedQuestions.length === 0 ? (
+                <div className="text-center py-6 bg-white border border-slate-100 rounded-sm">
+                  <Target className="w-8 h-8 text-[#99cc33] mx-auto mb-2" />
+                  <p className="text-[10px] text-gray-500 uppercase font-bold">No common mistakes found</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {missedQuestions.map((q: any) => (
+                    <div key={q.id} className="bg-white p-4 border border-slate-200 rounded-sm shadow-sm group hover:border-[#003057] transition-all">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[9px] font-black text-[#99cc33] uppercase tracking-widest bg-[#003057] px-2 py-0.5 rounded-sm">
+                          {q.chapter?.split(' ')[1] ? `CH ${q.chapter.split(' ')[1]}` : 'MISC'}
+                        </span>
+                        <span className="text-[10px] font-black text-red-500 uppercase tracking-tighter">Missed {q.wrongCount}x</span>
+                      </div>
+                      <p className="text-xs font-bold text-[#003057] leading-tight line-clamp-2">
+                        {q.text}
+                      </p>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
