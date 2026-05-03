@@ -8,11 +8,12 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 const inter = Inter({ 
   subsets: ['latin'],
-  variable: '--font-inter',
+  display: 'swap',
 });
 
 const outfit = Outfit({
   subsets: ['latin'],
+  display: 'swap',
   variable: '--font-outfit',
 });
 
@@ -48,8 +49,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
-    <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
-      <body className="font-sans antialiased" suppressHydrationWarning>
+    <html lang="en" className={outfit.variable}>
+      <body className={`${inter.className} antialiased`} suppressHydrationWarning>
         <ErrorBoundary>
           <SessionProvider>
             <SettingsProvider>
