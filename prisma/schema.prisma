@@ -16,6 +16,8 @@ model User {
   mobile            String?
   resetToken        String?      @unique
   resetTokenExpires DateTime?
+  resetTokenLastSentAt DateTime?
+
   role              String       @default("USER")
   isBlocked         Boolean      @default(false)
   isWhitelisted     Boolean      @default(false)

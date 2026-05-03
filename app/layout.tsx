@@ -1,17 +1,25 @@
 import type {Metadata} from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Outfit } from 'next/font/google';
 import './globals.css'; // Global styles
 import AppLayout from '@/components/AppLayout';
 import { SettingsProvider } from '@/components/SettingsProvider';
 import SessionProvider from '@/components/providers/SessionProvider';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ 
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-outfit',
+});
 
 export const metadata: Metadata = {
   title: 'SPSV Study & Mock Test - Pass Your NTA Driver Entrance Test',
   description: 'The definitive platform for SPSV Industry and Area Knowledge Test preparation in Ireland. Expert-led study guides, calculations, and full-length mock exams.',
-  keywords: 'SPSV test, SPSV mock exam, taxi theory test Ireland, Industry Knowledge Test, Area Knowledge Ireland, SPSV manual study, NTA test preparation, Irish taxi license',
+  keywords: 'SPSV test, SPSV mock exam, taxi theory test Ireland, Industry Knowledge Test, Area Knowledge Ireland, SPSV manual study, NTA test preparation, Irish taxi licence',
   authors: [{ name: 'SPSV Study & Test' }],
   creator: 'SPSV Study & Test',
   publisher: 'SPSV Study & Test',
@@ -40,8 +48,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
-    <html lang="en">
-      <body className={inter.className} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
+      <body className="font-sans antialiased" suppressHydrationWarning>
         <ErrorBoundary>
           <SessionProvider>
             <SettingsProvider>
@@ -53,3 +61,4 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
     </html>
   );
 }
+

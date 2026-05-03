@@ -91,6 +91,7 @@ export default function AdminPage() {
   
   // Notice State
   const [noticeText, setNoticeText] = useState('');
+  const [noticeVisible, setNoticeVisible] = useState(false);
   const [noticeLoading, setNoticeLoading] = useState(false);
 
   useEffect(() => {
@@ -106,13 +107,22 @@ export default function AdminPage() {
 
   const fetchNoticeSetting = async () => {
     try {
-      const res = await fetch('/api/settings?key=NOTICE_TEXT');
-      if (res.ok) {
-        const data = await res.json();
+      const [textRes, visibleRes] = await Promise.all([
+        fetch('/api/settings?key=NOTICE_TEXT'),
+        fetch('/api/settings?key=NOTICE_VISIBLE')
+      ]);
+
+      if (textRes.ok) {
+        const data = await textRes.json();
         setNoticeText(data.value || '');
       }
+
+      if (visibleRes.ok) {
+        const data = await visibleRes.json();
+        setNoticeVisible(data.value === 'true');
+      }
     } catch (error) {
-      console.error('Error fetching notice:', error);
+      console.error('Error fetching notice settings:', error);
     }
   };
 
@@ -120,19 +130,39 @@ export default function AdminPage() {
     e.preventDefault();
     setNoticeLoading(true);
     try {
-      const res = await fetch('/api/settings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key: 'NOTICE_TEXT', value: noticeText }),
-      });
-      if (res.ok) {
-        alert('Notice updated successfully!');
-      } else {
-        alert('Failed to update notice.');
-      }
+      await Promise.all([
+        fetch('/api/settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key: 'NOTICE_TEXT', value: noticeText }),
+        }),
+        fetch('/api/settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key: 'NOTICE_VISIBLE', value: noticeVisible.toString() }),
+        })
+      ]);
+      alert('Notice settings updated successfully!');
     } catch (error) {
       console.error('Error saving notice:', error);
-      alert('Error saving notice.');
+      alert('Error saving notice settings.');
+    } finally {
+      setNoticeLoading(false);
+    }
+  };
+
+  const toggleNoticeVisibility = async () => {
+    const newValue = !noticeVisible;
+    setNoticeVisible(newValue);
+    setNoticeLoading(true);
+    try {
+      await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'NOTICE_VISIBLE', value: newValue.toString() }),
+      });
+    } catch (error) {
+      console.error('Error toggling notice:', error);
     } finally {
       setNoticeLoading(false);
     }
@@ -337,7 +367,7 @@ export default function AdminPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-3">
         <Loader2 className="w-8 h-8 animate-spin text-[#003057]" />
-        <p className="text-xs font-black text-[#003057] uppercase tracking-widest">Initializing Control Center...</p>
+        <p className="text-xs font-bold text-[#003057]">Initializing Control Center...</p>
       </div>
     );
   }
@@ -356,10 +386,10 @@ export default function AdminPage() {
         <div className="flex items-center justify-between px-6 h-14 max-w-7xl mx-auto w-full">
           <div className="flex items-center gap-3 text-white">
             <Shield className="w-5 h-5 text-[#99cc33]" />
-            <h1 className="text-sm font-black uppercase tracking-tight">Admin Control Center</h1>
+            <h1 className="text-sm font-bold">Admin Control Center</h1>
           </div>
-          <div className="text-[10px] font-black text-white/40 uppercase tracking-widest">
-            {users.length} TOTAL USERS RECORDED
+          <div className="text-[10px] font-bold text-white/40 tracking-widest">
+            {users.length} Total Users Recorded
           </div>
         </div>
 
@@ -369,7 +399,7 @@ export default function AdminPage() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-3 px-6 py-4 text-xs font-black uppercase tracking-[0.2em] transition-all border-b-4 ${activeTab === tab.id ? 'border-[#99cc33] text-white bg-white/5' : 'border-transparent text-white/40 hover:text-white hover:bg-white/5'}`}
+              className={`flex items-center gap-3 px-6 py-4 text-xs font-bold tracking-wider transition-all border-b-4 ${activeTab === tab.id ? 'border-[#99cc33] text-white bg-white/5' : 'border-transparent text-white/40 hover:text-white hover:bg-white/5'}`}
             >
               <tab.icon className={`w-4 h-4 ${activeTab === tab.id ? 'text-[#99cc33]' : ''}`} />
               <span className="hidden sm:inline">{tab.label}</span>
@@ -390,10 +420,10 @@ export default function AdminPage() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="text"
-                placeholder="SEARCH REGISTRY (NAME, EMAIL, MOBILE)..."
+                placeholder="Search registry (Name, Email, Mobile)..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 text-xs font-bold bg-slate-50 border-2 border-slate-100 rounded-sm focus:border-[#003057] outline-none uppercase tracking-widest placeholder:text-slate-300"
+                className="w-full pl-12 pr-4 py-3 text-xs font-bold bg-slate-50 border-2 border-slate-100 rounded-sm focus:border-[#003057] outline-none tracking-tight placeholder:text-slate-400"
               />
             </div>
           </div>
@@ -488,18 +518,18 @@ export default function AdminPage() {
             <form onSubmit={handleSaveSmtp} className="space-y-6">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Host Address</label>
+                  <label className="block text-[10px] font-bold text-slate-400 tracking-widest mb-2">Host address</label>
                   <input type="text" value={smtpConfig.SMTP_HOST} onChange={(e) => setSmtpConfig({ ...smtpConfig, SMTP_HOST: e.target.value })} placeholder="smtp.example.com"
                     className="w-full px-4 py-3 text-xs font-bold bg-slate-50 border-2 border-slate-100 rounded-sm focus:border-[#003057] outline-none" />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Port</label>
+                  <label className="block text-[10px] font-bold text-slate-400 tracking-widest mb-2">Port</label>
                   <input type="text" value={smtpConfig.SMTP_PORT} onChange={(e) => setSmtpConfig({ ...smtpConfig, SMTP_PORT: e.target.value })} placeholder="465"
                     className="w-full px-4 py-3 text-xs font-bold bg-slate-50 border-2 border-slate-100 rounded-sm focus:border-[#003057] outline-none" />
                 </div>
               </div>
               <div>
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Service Username</label>
+                <label className="block text-[10px] font-bold text-slate-400 tracking-widest mb-2">Service username</label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <input type="text" value={smtpConfig.SMTP_USER} onChange={(e) => setSmtpConfig({ ...smtpConfig, SMTP_USER: e.target.value })} placeholder="noreply@example.com"
@@ -507,7 +537,7 @@ export default function AdminPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Service Password</label>
+                <label className="block text-[10px] font-bold text-slate-400 tracking-widest mb-2">Service password</label>
                 <div className="relative">
                   <Key className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <input type={showPass ? 'text' : 'password'} value={smtpConfig.SMTP_PASS} onChange={(e) => setSmtpConfig({ ...smtpConfig, SMTP_PASS: e.target.value })} placeholder="Your password"
@@ -518,8 +548,8 @@ export default function AdminPage() {
                 </div>
               </div>
               <button type="submit" disabled={smtpLoading}
-                className="w-full py-4 bg-[#003057] hover:bg-black disabled:opacity-50 text-white text-xs font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 border-b-4 border-black/20 rounded-sm">
-                {smtpLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save System Parameters'}
+                className="w-full py-4 bg-[#003057] hover:bg-black disabled:opacity-50 text-white text-xs font-bold tracking-[0.2em] transition-all flex items-center justify-center gap-3 border-b-4 border-black/20 rounded-sm">
+                {smtpLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save settings'}
               </button>
             </form>
           </div>
@@ -563,16 +593,40 @@ export default function AdminPage() {
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 ml-8">Update the red scrolling text visible across the site.</p>
           </div>
-          <form onSubmit={handleSaveNotice} className="p-6 space-y-4 max-w-2xl">
-            <div>
-              <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">Scrolling Text</label>
-              <textarea value={noticeText} onChange={(e) => setNoticeText(e.target.value)} placeholder="Enter notice text (leave empty to hide bar)..."
-                rows={3} className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-red-500 outline-none dark:text-white resize-none" />
-              <p className="text-[10px] text-gray-400 mt-1 italic">The bar is hidden when this field is empty.</p>
+          <form onSubmit={handleSaveNotice} className="p-6 space-y-6 max-w-2xl">
+            <div className="flex items-center justify-between p-4 bg-slate-50 border-2 border-slate-100 rounded-sm">
+              <div className="flex items-center gap-3">
+                {noticeVisible ? <Eye className="w-5 h-5 text-[#99cc33]" /> : <EyeOff className="w-5 h-5 text-slate-400" />}
+                <div>
+                  <p className="text-xs font-bold text-[#003057] tracking-widest">Notice bar visibility</p>
+                  <p className="text-[10px] font-bold text-slate-400">Current status: {noticeVisible ? 'Visible' : 'Hidden'}</p>
+                </div>
+              </div>
+              <button 
+                type="button"
+                onClick={toggleNoticeVisibility}
+                disabled={noticeLoading}
+                className={`px-4 py-2 text-[10px] font-bold tracking-widest transition-all rounded-sm border-b-4 ${noticeVisible ? 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100' : 'bg-[#99cc33] text-[#003057] border-[#76a125] hover:bg-[#86b32d]'}`}
+              >
+                {noticeVisible ? 'Hide notice bar' : 'Show notice bar'}
+              </button>
             </div>
+
+            <div>
+              <label className="block text-[10px] font-bold text-slate-400 tracking-widest mb-2">Scrolling text content</label>
+              <textarea 
+                value={noticeText} 
+                onChange={(e) => setNoticeText(e.target.value)} 
+                placeholder="Enter notice text..."
+                rows={3} 
+                className="w-full px-4 py-3 text-xs font-bold bg-slate-50 border-2 border-slate-100 rounded-sm focus:border-[#003057] outline-none resize-none" 
+              />
+              <p className="text-[10px] text-slate-400 mt-2 font-bold tracking-tighter">Tip: Keep it concise for better readability on mobile devices.</p>
+            </div>
+
             <button type="submit" disabled={noticeLoading}
-              className="px-6 py-2.5 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white text-sm font-bold transition-colors flex items-center gap-2">
-              {noticeLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Update Notice'}
+              className="w-full py-4 bg-[#003057] hover:bg-black disabled:opacity-50 text-white text-xs font-bold tracking-[0.2em] transition-all flex items-center justify-center gap-3 border-b-4 border-black/20 rounded-sm">
+              {noticeLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save notice'}
             </button>
           </form>
         </div>

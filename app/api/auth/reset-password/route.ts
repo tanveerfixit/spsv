@@ -1,44 +1,48 @@
 import { NextResponse } from 'next/server';
-import bcrypt from 'bcrypt';
 import prisma from '@/lib/prisma';
+import bcrypt from 'bcrypt';
 
 export async function POST(req: Request) {
   try {
-    const { token, password } = await req.json();
+    const { email, otp, password } = await req.json();
 
-    if (!token || !password) {
-      return NextResponse.json({ message: 'Token and password are required' }, { status: 400 });
+    if (!email || !otp || !password) {
+      return NextResponse.json({ message: 'Email, OTP, and new password are required' }, { status: 400 });
     }
 
-    // Find user by token using Raw SQL
-    const users = await prisma.$queryRaw<any[]>`
-      SELECT id FROM User 
-      WHERE resetToken = ${token} 
-      AND resetTokenExpires > ${new Date()}
-      LIMIT 1
-    `;
-
-    const user = users[0];
-
-    if (!user) {
-      return NextResponse.json({ message: 'Invalid or expired token' }, { status: 400 });
+    if (password.length < 6) {
+      return NextResponse.json({ message: 'Password must be at least 6 characters long' }, { status: 400 });
     }
 
-    // Hash the new password
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user || user.resetToken !== otp || !user.resetTokenExpires) {
+      return NextResponse.json({ message: 'Invalid or expired OTP' }, { status: 400 });
+    }
+
+    // Check if OTP is expired
+    if (new Date() > new Date(user.resetTokenExpires)) {
+      return NextResponse.json({ message: 'OTP has expired' }, { status: 400 });
+    }
+
+    // Hash new password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Update user and clear reset token fields using Raw SQL
-    await prisma.$executeRaw`
-      UPDATE User 
-      SET password = ${hashedPassword}, 
-          resetToken = NULL, 
-          resetTokenExpires = NULL 
-      WHERE id = ${user.id}
-    `;
+    // Update password and clear reset fields
+    await prisma.user.update({
+      where: { email },
+      data: {
+        password: hashedPassword,
+        resetToken: null,
+        resetTokenExpires: null,
+      },
+    });
 
-    return NextResponse.json({ message: 'Password reset successful' });
+    return NextResponse.json({ message: 'Password has been reset successfully' });
   } catch (error) {
     console.error('Reset password error:', error);
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 }

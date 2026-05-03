@@ -26,23 +26,23 @@ export default function Home() {
 
   const cards = [
     {
-      title: 'SPSV HANDBOOK',
-      subtitle: 'STUDY MATERIAL',
+      title: 'SPSV Handbook',
+      subtitle: 'Study Material',
       description: 'Review the comprehensive study material and build your foundation.',
       href: '/study',
       icon: <BookOpen className="w-8 h-8" />,
     },
     {
-      title: 'Chapter Wise Practice test',
-      subtitle: 'PRACTICE MODULES',
+      title: 'Chapter Practice Tests',
+      subtitle: 'Practice Modules',
       description: 'Practice specific chapters to master individual sections.',
       href: '/assessment',
       icon: <List className="w-8 h-8" />,
     },
 
     {
-      title: 'PERFORMANCE',
-      subtitle: 'DASHBOARD',
+      title: 'Performance',
+      subtitle: 'Dashboard',
       description: 'Track your scores and see your improvement over time.',
       href: '/dashboard',
       icon: <BarChart className="w-8 h-8" />,
@@ -70,8 +70,8 @@ export default function Home() {
                 {card.icon}
               </div>
               <div className="text-right">
-                <span className="block text-[10px] font-black text-[#99cc33] uppercase tracking-[0.2em]">{card.subtitle}</span>
-                <h3 className="text-2xl font-black text-[#003057] tracking-tighter uppercase leading-none mt-1">
+                <span className="block text-[10px] font-bold text-[#99cc33] tracking-[0.2em]">{card.subtitle}</span>
+                <h3 className="font-heading text-2xl font-bold text-[#003057] tracking-tighter leading-none mt-1">
                   {card.title}
                 </h3>
               </div>
@@ -81,8 +81,8 @@ export default function Home() {
               {card.description}
             </p>
 
-            <div className="flex items-center gap-2 text-[#003057] font-black text-xs uppercase tracking-widest group-hover:gap-4 transition-all">
-              <span>Launch Module</span>
+            <div className="flex items-center gap-2 text-[#003057] font-bold text-xs tracking-widest group-hover:gap-4 transition-all">
+              <span>Launch module</span>
               <ChevronRight className="w-4 h-4 text-[#99cc33]" />
             </div>
           </Link>
@@ -98,11 +98,11 @@ export default function Home() {
         <div className="relative z-10 max-w-2xl">
           <div className="flex items-center gap-3 mb-6">
             <div className="h-px w-12 bg-[#99cc33]" />
-            <span className="text-[#99cc33] font-black uppercase text-xs tracking-[0.3em]">Learning Resource</span>
+            <span className="text-[#99cc33] font-bold text-xs tracking-[0.3em]">Learning resource</span>
           </div>
           
-          <h2 className="text-3xl md:text-5xl font-black mb-6 leading-tight uppercase tracking-tighter italic">
-            Ready to <br/> <span className="text-[#99cc33]">Practice</span>?
+          <h2 className="font-heading text-3xl md:text-5xl font-black mb-6 leading-tight tracking-tighter italic">
+            Ready to <br/> <span className="text-[#99cc33]">practice</span>?
           </h2>
           
           <p className="text-gray-300 text-lg mb-10 font-medium leading-relaxed">
@@ -113,9 +113,9 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4">
             <Link 
               href="/assessment" 
-              className="inline-flex items-center justify-center px-10 py-5 bg-[#99cc33] text-[#003057] font-black uppercase tracking-widest hover:bg-white transition-all rounded-sm"
+              className="inline-flex items-center justify-center px-10 py-5 bg-[#99cc33] text-[#003057] font-bold tracking-widest hover:bg-white transition-all rounded-sm"
             >
-              Start Practice Session
+              Start practice session
             </Link>
           </div>
         </div>

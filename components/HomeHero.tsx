@@ -8,8 +8,8 @@ export default function HomeHero() {
 
   return (
     <div className="text-left md:text-center mb-6 md:mb-16 transition-all duration-200">
-      <h2 className="text-3xl md:text-5xl font-black mb-3 md:mb-6 text-[#003057] tracking-tighter uppercase">
-        Master Your <span className="text-[#99cc33]">Knowledge</span>
+      <h2 className="font-heading text-4xl md:text-6xl font-black mb-3 md:mb-6 text-[#003057] tracking-tighter leading-tight">
+        Master your <span className="text-[#99cc33]">knowledge</span>
       </h2>
 
       <div className="max-w-2xl mx-auto">
@@ -22,17 +22,17 @@ export default function HomeHero() {
           </p>
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="mt-2 inline-flex items-center gap-1.5 text-[#003057] font-black text-xs uppercase tracking-widest hover:text-[#99cc33] transition-colors"
+            className="mt-2 inline-flex items-center gap-1.5 text-[#003057] font-bold text-xs tracking-widest hover:text-[#99cc33] transition-colors"
             aria-expanded={isExpanded}
           >
             {isExpanded ? (
               <>
-                <span>Show Less</span>
+                <span>Show less</span>
                 <ChevronUp className="w-4 h-4" />
               </>
             ) : (
               <>
-                <span>Read More</span>
+                <span>Read more</span>
                 <ChevronDown className="w-4 h-4" />
               </>
             )}

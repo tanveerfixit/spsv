@@ -86,7 +86,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
         </button>
 
         <Link href="/" className="mr-8 shrink-0">
-          <span className="font-black text-xl text-white tracking-tighter leading-none">SPSV <span className="text-[#99cc33]">PRO</span></span>
+          <span className="font-heading font-black text-2xl text-white tracking-tighter leading-none">SPSV <span className="text-[#99cc33]">PRO</span></span>
         </Link>
 
         {/* Desktop Nav */}
@@ -95,7 +95,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
           <div className="relative h-full flex items-center">
             <button
               onClick={() => toggleDropdown('manual')}
-              className={`flex items-center gap-2 px-4 h-full font-bold uppercase tracking-wider transition-all border-b-2 ${activeDropdown === 'manual' ? 'border-[#99cc33] text-[#99cc33] bg-white/5' : 'border-transparent text-gray-300 hover:text-white hover:bg-white/5'}`}
+              className={`flex items-center gap-2 px-4 h-full font-bold tracking-tight transition-all border-b-2 ${activeDropdown === 'manual' ? 'border-[#99cc33] text-[#99cc33] bg-white/5' : 'border-transparent text-gray-300 hover:text-white hover:bg-white/5'}`}
             >
               Study
               <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-150 ${activeDropdown === 'manual' ? 'rotate-180' : ''}`} />
@@ -114,7 +114,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
           <div className="relative h-full flex items-center">
             <button
               onClick={() => toggleDropdown('assessment')}
-              className={`flex items-center gap-2 px-4 h-full font-bold uppercase tracking-wider transition-all border-b-2 ${activeDropdown === 'assessment' ? 'border-[#99cc33] text-[#99cc33] bg-white/5' : 'border-transparent text-gray-300 hover:text-white hover:bg-white/5'}`}
+              className={`flex items-center gap-2 px-4 h-full font-bold tracking-tight transition-all border-b-2 ${activeDropdown === 'assessment' ? 'border-[#99cc33] text-[#99cc33] bg-white/5' : 'border-transparent text-gray-300 hover:text-white hover:bg-white/5'}`}
             >
               Practice
               <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-150 ${activeDropdown === 'assessment' ? 'rotate-180' : ''}`} />
@@ -131,7 +131,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
 
           {/* FAQ */}
           <Link href="/faq"
-            className={`flex items-center gap-2 px-4 h-full font-bold uppercase tracking-wider border-b-2 transition-all ${pathname === '/faq' ? 'border-[#99cc33] text-[#99cc33] bg-white/5' : 'border-transparent text-gray-300 hover:text-white hover:bg-white/5'}`}>
+            className={`flex items-center gap-2 px-4 h-full font-bold tracking-tight border-b-2 transition-all ${pathname === '/faq' ? 'border-[#99cc33] text-[#99cc33] bg-white/5' : 'border-transparent text-gray-300 hover:text-white hover:bg-white/5'}`}>
             FAQ
           </Link>
         </nav>
@@ -151,7 +151,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
               {user ? (
                 <>
                   <div className="px-4 py-2 border-b border-white/10 mb-2">
-                    <p className="text-[10px] font-black text-[#99cc33] uppercase tracking-widest truncate">{user.email?.split('@')[0]}</p>
+                    <p className="text-[10px] font-bold text-[#99cc33] tracking-tight truncate">{user.email?.split('@')[0]}</p>
                   </div>
                   <Link href="/dashboard" onClick={() => setActiveDropdown(null)}
                     className="block px-4 py-2 text-[12px] font-bold text-gray-300 hover:text-white hover:bg-[#99cc33]/10 border-l-4 border-transparent hover:border-[#99cc33] transition-all">
@@ -166,7 +166,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
                   <div className="mt-2 pt-2 border-t border-white/10">
                     <button onClick={handleLogout}
                       className="w-full text-left px-4 py-2 text-[12px] font-bold text-red-400 hover:bg-red-400/10 border-l-4 border-transparent hover:border-red-400 transition-all">
-                      Logout Session
+                      Logout
                     </button>
                   </div>
                 </>
@@ -174,7 +174,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
                 <>
                   <Link href="/login" onClick={() => setActiveDropdown(null)}
                     className="block px-4 py-2 text-[12px] font-bold text-gray-300 hover:text-white hover:bg-[#99cc33]/10 border-l-4 border-transparent hover:border-[#99cc33] transition-all">
-                    User Login
+                    Sign In
                   </Link>
                   <Link href="/login?mode=signup" onClick={() => setActiveDropdown(null)}
                     className="block px-4 py-2 text-[12px] font-bold text-gray-300 hover:text-white hover:bg-[#99cc33]/10 border-l-4 border-transparent hover:border-[#99cc33] transition-all">
@@ -193,7 +193,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
           {/* Manual Section */}
           <div className="border-b-2 border-white/5">
             <button onClick={() => toggleDropdown('m-manual')}
-              className="flex items-center justify-between w-full px-6 py-4 text-[11px] font-black uppercase tracking-widest text-white">
+              className="flex items-center justify-between w-full px-6 py-4 text-xs font-bold tracking-tight text-white">
               <span className="flex items-center gap-3">Study Modules</span>
               <ChevronDown className={`w-4 h-4 text-[#99cc33] transition-transform duration-150 ${activeDropdown === 'm-manual' ? 'rotate-180' : ''}`} />
             </button>
@@ -210,8 +210,8 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
           {/* Assessment Section */}
           <div className="border-b-2 border-white/5">
             <button onClick={() => toggleDropdown('m-assessment')}
-              className="flex items-center justify-between w-full px-6 py-4 text-[11px] font-black uppercase tracking-widest text-white">
-              <span className="flex items-center gap-3">Practice Checks</span>
+              className="flex items-center justify-between w-full px-6 py-4 text-xs font-bold tracking-tight text-white">
+              <span className="flex items-center gap-3">Practice Tests</span>
               <ChevronDown className={`w-4 h-4 text-[#99cc33] transition-transform duration-150 ${activeDropdown === 'm-assessment' ? 'rotate-180' : ''}`} />
             </button>
             <div className={`overflow-hidden bg-black/10 transition-all duration-200 ease-out ${activeDropdown === 'm-assessment' ? 'max-h-[500px]' : 'max-h-0'}`}>
@@ -226,8 +226,8 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
 
           {/* FAQ */}
           <Link href="/faq"
-            className={`flex items-center gap-3 px-6 py-4 text-[11px] font-black uppercase tracking-widest border-b-2 border-white/5 transition-all ${pathname === '/faq' ? 'text-[#99cc33] bg-white/5' : 'text-white'}`}>
-            FAQ Registry
+            className={`flex items-center gap-3 px-6 py-4 text-xs font-bold tracking-tight border-b-2 border-white/5 transition-all ${pathname === '/faq' ? 'text-[#99cc33] bg-white/5' : 'text-white'}`}>
+            FAQ
           </Link>
 
           {/* User Section */}
@@ -236,7 +236,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
               <div className="flex items-center gap-4 w-full">
                 <div className="w-10 h-10 bg-[#99cc33] text-[#003057] flex items-center justify-center text-sm font-black rounded-sm border-2 border-white/20 shrink-0">{userInitial}</div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-black text-white/40 uppercase tracking-widest truncate">{user.email?.split('@')[0]}</p>
+                  <p className="text-[10px] font-bold text-white/40 tracking-tight truncate">{user.email?.split('@')[0]}</p>
                 </div>
                 <div className="flex items-center gap-1">
                   <Link href="/dashboard" className="p-2 text-white hover:text-[#99cc33] transition-colors">Progress</Link>
@@ -244,8 +244,8 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
                 </div>
               </div>
             ) : (
-              <Link href="/login" className="w-full text-center py-4 text-xs font-black uppercase tracking-[0.2em] bg-[#99cc33] text-[#003057] hover:bg-[#88bb22] transition-colors rounded-sm">
-                Initiate Sign In
+              <Link href="/login" className="w-full text-center py-4 text-xs font-bold tracking-widest bg-[#99cc33] text-[#003057] hover:bg-[#88bb22] transition-colors rounded-sm">
+                Sign In
               </Link>
             )}
           </div>

@@ -106,7 +106,7 @@ function AuthPageContent() {
             
             <div className="mb-8">
               <h2 className="text-3xl font-black text-[#003057] uppercase italic tracking-tighter leading-none mb-2">
-                {mode === 'login' ? 'Account Login' : 'User Registration'}
+                {mode === 'login' ? 'Sign In' : 'Create Account'}
               </h2>
               <div className="h-1 w-12 bg-[#99cc33] mb-4" />
             </div>
@@ -122,7 +122,7 @@ function AuthPageContent() {
             {success && (
               <div className="flex items-start gap-3 p-4 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800 rounded-xl text-sm font-medium">
                 <CheckCircle className="w-5 h-5 shrink-0" />
-                <p>{mode === 'signup' ? 'Registration successful' : 'Signed in successfully'}</p>
+                <p>{mode === 'signup' ? 'Account created successfully' : 'Signed in successfully'}</p>
               </div>
             )}
 
@@ -135,8 +135,8 @@ function AuthPageContent() {
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="FULL NAME"
-                    className="w-full pl-12 pr-4 py-4 text-sm font-bold bg-slate-50 border-2 border-slate-100 rounded-sm focus:border-[#003057] outline-none transition-all placeholder:text-slate-300"
+                    placeholder="Full Name"
+                    className="w-full pl-12 pr-4 py-4 text-sm font-bold bg-slate-50 border-2 border-slate-100 rounded-sm focus:border-[#003057] outline-none transition-all placeholder:text-slate-400"
                   />
                 </div>
               )}
@@ -149,8 +149,8 @@ function AuthPageContent() {
                   disabled={success}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="EMAIL ADDRESS"
-                  className="w-full pl-12 pr-4 py-4 text-sm font-bold bg-slate-50 border-2 border-slate-100 rounded-sm focus:border-[#003057] outline-none transition-all placeholder:text-slate-300 disabled:opacity-50"
+                  placeholder="Email Address"
+                  className="w-full pl-12 pr-4 py-4 text-sm font-bold bg-slate-50 border-2 border-slate-100 rounded-sm focus:border-[#003057] outline-none transition-all placeholder:text-slate-400 disabled:opacity-50"
                 />
               </div>
 
@@ -176,8 +176,8 @@ function AuthPageContent() {
                   disabled={success}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="PASSWORD"
-                  className="w-full pl-12 pr-12 py-4 text-sm font-bold bg-slate-50 border-2 border-slate-100 rounded-sm focus:border-[#003057] outline-none transition-all placeholder:text-slate-300 disabled:opacity-50"
+                  placeholder="Password"
+                  className="w-full pl-12 pr-12 py-4 text-sm font-bold bg-slate-50 border-2 border-slate-100 rounded-sm focus:border-[#003057] outline-none transition-all placeholder:text-slate-400 disabled:opacity-50"
                 />
                 <button
                   type="button"
@@ -206,7 +206,7 @@ function AuthPageContent() {
               )}
               {mode === 'login' && !success && (
                 <Link href="/forgot-password" intrinsic-id="recover-link" className="text-xs text-[#003057] font-black uppercase tracking-widest hover:text-[#99cc33]">
-                  Forgot
+                  Forgot Password?
                 </Link>
               )}
             </div>
@@ -219,10 +219,10 @@ function AuthPageContent() {
               {loading && !success && <Loader2 className="w-5 h-5 animate-spin" />}
               <span>
                 {success 
-                  ? 'Access Granted' 
+                  ? 'Success' 
                   : loading 
-                    ? (mode === 'login' ? 'Verifying...' : 'Processing...') 
-                    : (mode === 'login' ? 'Confirm Login' : 'Register Account')
+                    ? (mode === 'login' ? 'Signing In...' : 'Creating Account...') 
+                    : (mode === 'login' ? 'Sign In' : 'Create Account')
                 }
               </span>
             </button>
@@ -233,7 +233,7 @@ function AuthPageContent() {
                 onClick={toggleMode}
                 className="w-full py-4 text-[#003057] text-[10px] font-black uppercase tracking-[0.2em] hover:text-[#99cc33] transition-colors border-2 border-slate-100 rounded-sm mt-2"
               >
-                {mode === 'login' ? 'Sign Up' : 'Sign In'}
+                {mode === 'login' ? 'Don\'t have an account? Sign Up' : 'Already have an account? Sign In'}
               </button>
             )}
           </form>
