@@ -15,9 +15,15 @@ import { chapter9BusinessQuestions } from '@/lib/data/chapter9Questions';
 import { chapter10SafetyQuestions } from '@/lib/data/chapter10Questions';
 import { allSpsvQuestions } from '@/lib/data/mockData';
 
+import FinesPage from '@/app/study/fines/page';
+
 export default async function ContentPage({ params }: { params: Promise<{ slug: string[] }> }) {
   const resolvedParams = await params;
   const slugPath = resolvedParams.slug.join('/');
+
+  if (slugPath === 'official-manual/chapter-5-working-as-an-operator/5-13-fixed-payment-offences' || slugPath.startsWith('official-manual/fines-offences-guide/')) {
+    return <FinesPage />;
+  }
 
   if (slugPath === 'official-manual/introduction/welcome' || slugPath === 'official-manual/introduction/terminology') {
     return <Introduction />;

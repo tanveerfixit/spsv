@@ -149,6 +149,10 @@ const SPSV_DATA = [
           'Appendix B: Local area hackneys',
           'Appendix C: Dispatch operator licensing'
         ]
+      },
+      {
+        title: 'Fines & Offences Guide',
+        subCategories: ['Study Fines']
       }
     ]
   },

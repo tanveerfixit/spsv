@@ -19,6 +19,7 @@ const MANUAL_CHAPTERS = [
   { title: 'Ch 9 – Your Business', href: '/official-manual/chapter-9-your-spsv-business/9-1-working-in-the-spsv-industry' },
   { title: 'Ch 10 – Staying Safe', href: '/official-manual/chapter-10-staying-safe/10-1-nta-s-role-in-safety' },
   { title: 'Ch 11 – Module Overview', href: '/official-manual/chapter-11-preparing-for-test/11-1-testing-in-the-skills-development-programme' },
+  { title: 'Fines & Offences Guide', href: '/study/fines' },
 ];
 
 const ASSESSMENT_ITEMS = [

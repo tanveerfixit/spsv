@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BookOpen, ChevronRight } from 'lucide-react';
+import { BookOpen, ChevronRight, ShieldAlert } from 'lucide-react';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -148,6 +148,14 @@ const CHAPTERS = [
       'Appendix B: Local area hackneys',
       'Appendix C: Dispatch operator licensing'
     ]
+  },
+  {
+    title: 'SPSV Fines & Offences',
+    subCategories: [
+      'Major Offences',
+      'Fixed Payment Offences',
+      'Road Safety Fines'
+    ]
   }
 ];
 
@@ -164,10 +172,35 @@ export default function StudyPage() {
         </div>
       </div>
 
+      {/* Fines and Offences Banner */}
+      <Link 
+        href="/study/fines"
+        className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 bg-gradient-to-r from-[#003057] to-[#0d4a7c] border-2 border-[#003057] hover:border-[#99cc33] rounded-xl text-white shadow-md transition-all group mb-8"
+      >
+        <div className="flex items-start sm:items-center gap-4">
+          <div className="bg-[#99cc33] text-[#003057] p-3 rounded-lg group-hover:scale-105 transition-transform shrink-0">
+            <ShieldAlert className="w-6 h-6" />
+          </div>
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#99cc33]">Special Study Guide</span>
+            <h3 className="text-xl font-bold mt-0.5 group-hover:text-[#99cc33] transition-colors">Fines & Offences Guide</h3>
+            <p className="text-sm text-gray-300 mt-1 max-w-xl">
+              Study the €80 to €5,000 fixed penalty notices, vehicle compliance regulations, and road safety penalty points.
+            </p>
+          </div>
+        </div>
+        <div className="mt-4 sm:mt-0 flex items-center gap-1.5 bg-[#99cc33]/15 text-[#99cc33] hover:bg-[#99cc33]/25 px-4 py-2 text-xs font-bold rounded-lg border border-[#99cc33]/30 transition-all shrink-0">
+          <span>Start studying</span>
+          <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+        </div>
+      </Link>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {CHAPTERS.map((chapter) => {
           const firstSub = chapter.subCategories[0];
-          const href = `/official-manual/${slugify(chapter.title)}/${slugify(firstSub)}`;
+          const href = chapter.title === 'SPSV Fines & Offences' 
+            ? '/study/fines'
+            : `/official-manual/${slugify(chapter.title)}/${slugify(firstSub)}`;
           
           return (
             <Link 
