@@ -73,6 +73,12 @@ export default async function ContentPage({ params }: { params: Promise<{ slug: 
     return <TestSimulator questions={chapter10SafetyQuestions} category="Chapter 10 Test" />;
   }
 
+  if (slugPath === 'assessment/practice-tests/industry-knowledge-test') {
+    // Shuffle and take 54 questions for Industry Knowledge
+    const shuffled = [...allSpsvQuestions].sort(() => 0.5 - Math.random());
+    return <TestSimulator questions={shuffled.slice(0, 54)} category="Industry Knowledge Test" passMark={75} />;
+  }
+
   if (slugPath === 'assessment/practice-tests/standard-mock-exam') {
     // Shuffle and take 90 questions for a standard mock
     const shuffled = [...allSpsvQuestions].sort(() => 0.5 - Math.random());
